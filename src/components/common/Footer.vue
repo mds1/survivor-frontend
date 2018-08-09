@@ -14,8 +14,8 @@
         <p class="footer-large">Check out the source code on GitHub</p>
         <a
           class="footer-small"
-          href="https://github.com/mds1/survivor-dapp-template">
-          https://github.com/mds1/survivor-dapp-template</a>
+          href="https://github.com/mds1/survivor">
+          https://github.com/mds1/survivor</a>
       </div>
 
       <!-- Third column  -->
@@ -23,7 +23,7 @@
         <p class="footer-large">Questions, feedback, and suggestions</p>
         <p class="footer-small">Leave feedback on the GitHub page</p>
         <br>
-        <p class="footer-end-left">SiteName &copy; 2018</p>
+        <p class="footer-end-left">&copy; 2018</p>
       </div>
 
     </div>
@@ -55,7 +55,7 @@ export default {
 .footer-small, .footer-end-left, .footer-end-right {
   font-size: small;
   // max-width: 90%;
-  color: $neutral;
+  color: $background;
 }
 
 .footer-small {
@@ -63,7 +63,7 @@ export default {
 }
 
 .footer-end-left, .footer-end-right {
-  color: $info;
+  color: $background;
   margin: 0% 4% 4% 4%;
 }
 
@@ -79,7 +79,7 @@ export default {
   font-size: medium;
   margin: 4% 4% 0% 4%;
   font-weight: 500;
-  color: $neutral;
+  color: $background;
 }
 
 .footer-col {

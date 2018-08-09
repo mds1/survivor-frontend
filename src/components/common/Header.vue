@@ -100,7 +100,7 @@ nav {
     width: 40%; // set width of page that menu items should take up
 
     a {
-      color: $primary;
+      color: $text2;
       text-decoration: none;
       transition: all 0.5s ease;
 

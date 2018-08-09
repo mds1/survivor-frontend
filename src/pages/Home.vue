@@ -3,21 +3,25 @@
   <div class="layout-padding">
 
     <!-- your content -->
-    <h3>Ethereum Lottery</h3>
-    <p>This is the home page for the Ethereum survivor contract {{ contract.options.address }} </p>
-    <p>This contract is managed by {{ this.$store.state.contract.manager }}</p>
+    <h2 style='margin-bottom:-3rem'>NFL Survivor</h2>
+    <h5>Provably Fair and Open Source</h5>
+    <!-- <p>This is the home page for the Ethereum survivor contract {{ contract.options.address }} </p> -->
+    <!-- <p>This contract is managed by {{ this.$store.state.contract.owner }}</p> -->
+    <!-- <p>There are currently XX players entered competing for a prize of YY ETH!</p> -->
     <p>There are currently {{ this.$store.state.contract.players.length }} players entered competing for a prize of {{ this.$store.state.contract.balance }} ETH!</p>
-    <br>
-    <p>You are currently connected to the {{ this.$store.state.network.current }} network</p>
+
 
     <app-enter-form/>
+    <br>
+    <app-deadline/>
 
   </div>
 </template>
 
 <script>
 import survivor from '@ethereum/survivorInstance.js';
-// import EnterForm from '@contract/EnterForm.vue';
+import EnterForm from '@contract/EnterForm.vue';
+import Deadline from '@contract/Deadline.vue';
 
 export default {
   data() {
@@ -27,12 +31,12 @@ export default {
   },
 
   components: {
-    // appEnterForm: EnterForm,
+    appEnterForm: EnterForm,
+    appDeadline: Deadline,
   },
 
   created() {
     // Get contract properties since they're used on this page
-    this.$store.dispatch('setManager'); // get address of manager
     this.$store.dispatch('setPlayers'); // get list of players
     this.$store.dispatch('setBalance'); // get contract balance
   },
@@ -40,10 +44,11 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="stylus">
+<style lang="stylus" scoped>
 @import '~variables';
 
 .main {
   margin-top: auto;
 }
+
 </style>

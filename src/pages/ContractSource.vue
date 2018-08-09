@@ -47,6 +47,7 @@ export default {
 </script>
 
 <style lang="stylus">
+@import '~variables';
 pre, code {
   // why "monospace, monospace"? see https://stackoverflow.com/questions/38781089/font-family-monospace-monospace
   font-family: monospace, monospace;
@@ -60,5 +61,9 @@ code {
   display: block;
   padding: 1rem;
   word-wrap: normal;
+}
+
+a {
+  color: $hyperlink;
 }
 </style>

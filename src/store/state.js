@@ -14,7 +14,7 @@ export default {
 
   // Contract properties (require asynchronous calls)
   contract: {
-    manager: '', // address of who deployed contract
+    owner: '', // address of who deployed contract
     players: [], // list of entered addresses
     balance: '', // contract balance
   },

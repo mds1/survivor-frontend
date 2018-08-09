@@ -43,12 +43,13 @@
     </div> <!-- end "is MetaMask installed" div  -->
 
     <!-- Check that MetaMask is unlocked AND/OR connected to the required network -->
-    <div v-if="(!this.$store.state.MetaMask.isUnlocked || !this.$store.state.MetaMask.isOnCorrectNetwork) && this.$store.state.MetaMask.isInstalled">
-      <q-dialog v-model="showDialog" stack-buttons prevent-close @ok="onOk">
+    <div id='asdf' v-if="(!this.$store.state.MetaMask.isUnlocked || !this.$store.state.MetaMask.isOnCorrectNetwork) && this.$store.state.MetaMask.isInstalled">
+      <q-dialog v-model="showDialog" stack-buttons prevent-close @ok="onOk" color="#FFF">
 
         <!-- Dialog title -->
         <div slot='title' class='dialog-title'>
           {{ dialogTitle }}
+
         </div>
 
         <!-- Dialog body -->
@@ -114,19 +115,25 @@ export default {
 
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus" >
+@import '~variables';
+
 .dialog-title {
   text-align: center;
   font-family: 'Avenir', Helvetica, Arial, sans-serif; // configure fonts to match main fonts specified in App.vue
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #333;
+  color: $primary;
 }
 
 .dialog-body {
   font-family: 'Avenir', Helvetica, Arial, sans-serif; // configure fonts to match main fonts specified in App.vue
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  color: $text2;
+}
+
+.modal-content {
+  background: $background;
 }
 </style>

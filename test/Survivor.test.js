@@ -64,7 +64,7 @@ contract('Survivor', (accounts) => {
   });
 
   // ADMINISTRATIVE TESTS ------------------------------------------------------
-  // check that it assigns the deployer as the manager
+  // check that it assigns the deployer as the owner
   it('properly assigns the owner', async () => {
     // console.log(survivor)
     assert.equal(await survivor.OWNER(), accounts[0], 'Variable "OWNER" was not properly set');

@@ -32,8 +32,8 @@ export default {
   //                      Getting Contract Properties
   // ======================================================================
 
-  SET_MANAGER(state, address) {
-    state.contract.manager = address;
+  SET_OWNER(state, address) {
+    state.contract.owner = address;
   },
 
   SET_PLAYERS(state, players) {

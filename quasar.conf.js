@@ -39,6 +39,7 @@ module.exports = function (ctx) {
           '@components': path.resolve(__dirname, './src/components'),
           '@common': path.resolve(__dirname, './src/components/common'),
           '@contract': path.resolve(__dirname, './src/components/contract'),
+          '@contracts': path.resolve(__dirname, './build/contracts'),
           '@pages': path.resolve(__dirname, './src/pages'),
           '@ethereum': path.resolve(__dirname, './src/ethereum'),
           '@src': path.resolve(__dirname, './src'),

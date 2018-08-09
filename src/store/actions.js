@@ -1,6 +1,5 @@
 import web3 from '@ethereum/web3';
-// import survivor from '@ethereum/survivorInstance.js';
-let survivor; // TODO this is a temporary variable to replace above
+import survivor from '@ethereum/survivorInstance.js';
 import * as functions from '@common/functions.js';
 
 export default {
@@ -63,11 +62,11 @@ export default {
   //                      Getting Contract Properties
   // ======================================================================
 
-  async setManager(context) {
-    // get manager
-    const manager = await survivor.methods.manager().call();
+  async setOwner(context) {
+    // get owner
+    const owner = await survivor.methods.owner().call();
     // commit state mutation
-    context.commit('SET_MANAGER', manager);
+    context.commit('SET_OWNER', owner);
   },
 
   async setPlayers(context) {

@@ -84,18 +84,6 @@ li {
   margin: 0 10px;
 }
 
-// Font setup
-#q-app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-}
-
-h1, h2, strong {
-  color: #333;
-}
-
 // Footer bar setup
 #footerBar {
   height: 10px;
@@ -162,5 +150,21 @@ header {
 
 .Site-content--full::after {
   content: none;
+}
+
+// Font setup
+#q-app {
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2c3e50;
+}
+
+h1, h2, h3, strong {
+  color: $text1;
+}
+
+h5, p {
+  color: $text2;
 }
 </style>
