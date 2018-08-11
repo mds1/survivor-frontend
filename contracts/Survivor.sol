@@ -1,3 +1,6 @@
+import "node_modules/openzeppelin-solidity/contracts/ownership/Ownable.sol";
+
+
 /*
 
 This contract attempts to follow one of the goals of Vyper, which the Vyper
@@ -58,7 +61,7 @@ Architecture (idea)
 
 pragma solidity ^0.4.24;
 
-contract Survivor {
+contract Survivor is Ownable {
 
   // ===========================================================================
   //                             State Variables
@@ -109,7 +112,9 @@ contract Survivor {
     uint8 currentPick; // integer 0-31 represeting players current pick
   }
   // mapping of players to their status
-  mapping(address => PlayerInfo) players;
+  mapping(address => PlayerInfo) public players;
+  // array of all entered players (this can't be retrieved from a mapping)
+  address[] public playersEntered;
   // number of players who have entered
   uint256 public numPlayersEntered;
   // number of players remaining
@@ -132,8 +137,7 @@ contract Survivor {
 
 
   // Administrative variables --------------------------------------------------
-  // Contract owner
-  address public OWNER;
+  // Contract ownership handled by Ownable
 
 
   // ===========================================================================
@@ -147,13 +151,7 @@ contract Survivor {
   // ===========================================================================
 
   // Only allow owner to call function
-  modifier onlyOwner() {
-    require(
-      msg.sender == OWNER,
-      "Only the contract owner can call this function"
-    );
-    _;
-  }
+  //   "onlyOwner" modifer for this defined in Ownable.sol
 
   // Ensure entry deadline has not passed
   modifier onlyBeforeEntryDeadline() {
@@ -173,14 +171,14 @@ contract Survivor {
     _;
   }
 
-  // // Ensure caller has not been eliminated
-  // modifier onlyRemainingPlayers() {
-  //   require(
-  //     players[msg.sender].isAlive,
-  //     "This function can only be called by remaining players"
-  //   );
-  //   _;
-  // }
+  // Ensure caller has not been eliminated
+  modifier onlyPlayersWhoJoined() {
+    require(
+      players[msg.sender].hasJoined,
+      "This function can only be called by players who have joined"
+    );
+    _;
+  }
 
   // Ensure team has not yet been chosen
   modifier onlyAllowNewTeams(uint8 _team) {
@@ -205,8 +203,6 @@ contract Survivor {
   constructor(uint _entryFee, uint _entryDeadline,uint _firstWeekGameEnd)
     public
   {
-    // Assign owner
-    OWNER = msg.sender;
 
     // Set entry fee
     ENTRY_FEE = _entryFee;
@@ -246,6 +242,7 @@ contract Survivor {
     // EFFECTS
     // Update variables to indicate that player has joined
     players[msg.sender].hasJoined = true;
+    playersEntered.push(msg.sender);
     numPlayersEntered += 1;
     numPlayersRemaining += 1;
     // players[msg.sender].picks defaults to all false, so it doesn't need to be
@@ -261,14 +258,21 @@ contract Survivor {
   //   _team -- integer representing chosen team, alphabetically mapped to teams
   function makePick(uint8 _team)
     external
+    onlyPlayersWhoJoined
     onlyBeforePickDeadline
     onlyAllowNewTeams(_team)
   {
 
     // CHECKS
-    // All checks handled with modifiers. We do not validate that a player is
+    // Most checks handled with modifiers. We do not validate that a player is
     // not eliminated. That is handled on the server. Handling it here makes the
     // smart contract logic complicated and gas costs get expensive
+
+    // Make sure valid team is selected
+    require(
+      _team >= 0 && _team <= 31,
+      "Invalid team selected. Be sure to represent the team as an integer between 0 and 31"
+    );
 
     // EFFECTS
     // Update the players current pick
@@ -373,5 +377,32 @@ contract Survivor {
   }
 
 
+  // ===========================================================================
+  //                           Front End Helpers
+  // ===========================================================================
+
+  function getEnteredPlayers()
+    public
+    constant
+    returns(address[])
+  {
+    return playersEntered;
+  }
+
+  function getContractBalance()
+    public
+    constant
+    returns(uint256)
+  {
+    return address(this).balance;
+  }
+
+  function getTime()
+    public
+    constant
+    returns(uint256)
+  {
+    return block.timestamp;
+  }
 
 }

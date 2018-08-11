@@ -16,6 +16,7 @@
     "chai-as-promised": "^7.1.1",
     "ganache-cli": "^6.1.6",
     "mocha": "^5.2.0",
+    "openzeppelin-solidity": "1.11.0",
     "vuelidate": "^0.7.4",
     "web3": "^1.0.0-beta.35"
   },
