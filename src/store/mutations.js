@@ -43,4 +43,8 @@ export default {
   SET_BALANCE(state, balance) {
     state.contract.balance = balance;
   },
+
+  SET_ENTRY_FEE(state, entryFee) {
+    state.contract.entryFee = entryFee;
+  },
 };

@@ -23,9 +23,19 @@
           &nbsp;&nbsp;&nbsp;&nbsp;
 
           <!-- Smart contract source code page -->
+          <router-link :to='{ name: "standings"}' tag='li' active-class='active-page'>
+            <a>
+              Standings
+            </a>
+          </router-link>
+
+          <!-- add spaces -->
+          &nbsp;&nbsp;&nbsp;&nbsp;
+
+          <!-- Smart contract source code page -->
           <router-link :to='{ name: "contractSource"}' tag='li' active-class='active-page'>
             <a>
-              Smart Contract
+              Contract
             </a>
           </router-link>
 

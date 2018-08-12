@@ -8,7 +8,8 @@
     <!-- <p>This is the home page for the Ethereum survivor contract {{ contract.options.address }} </p> -->
     <!-- <p>This contract is managed by {{ this.$store.state.contract.owner }}</p> -->
     <!-- <p>There are currently XX players entered competing for a prize of YY ETH!</p> -->
-    <p>There are currently {{ this.$store.state.contract.players.length }} players entered competing for a prize of {{ this.$store.state.contract.balance }} ETH!</p>
+    <p>{{ this.$store.state.contract.players.length }} players entered</p>
+    <p> {{ this.$store.state.contract.balance }} ETH up for grabs!</p>
 
 
     <app-enter-form/>
@@ -39,6 +40,7 @@ export default {
     // Get contract properties since they're used on this page
     this.$store.dispatch('setPlayers'); // get list of players
     this.$store.dispatch('setBalance'); // get contract balance
+    this.$store.dispatch('setEntryFee'); // get contract balance
   },
 };
 </script>
@@ -50,5 +52,4 @@ export default {
 .main {
   margin-top: auto;
 }
-
 </style>

@@ -61,6 +61,7 @@ module.exports = function (ctx) {
         'QSpinner',
         'QSlider',
         'QDialog',
+        'QTable',
       ],
       directives: [
         'Ripple',

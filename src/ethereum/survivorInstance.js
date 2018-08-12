@@ -13,8 +13,7 @@ import survivor from '@contracts/Survivor.json';
 
 const instance = new web3.eth.Contract(
   survivor.abi,
-  // *REPLACE* this address with the address of your deployed contract
-  '0x170732ddd535ca37245ac8e24677f87c9a232965',
+  '0xCb9AC72B34b3F89Dbc278154ACC481d1D7dC133A',
 );
 
 export default instance;

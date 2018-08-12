@@ -1,12 +1,10 @@
-// Using fixed version for Oraclize
-// Requires Truffle v4.1.6
 pragma solidity ^0.4.19;
 
 // Import libraries
 // (note: Pausable is Ownable, so we don't need to import Ownable)
-import "./openzeppelin/Pausable.sol";
-import "./openzeppelin/SafeMath.sol";
-import "./openzeppelin/PullPayment.sol";
+import "../node_modules/openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
+import "../node_modules/openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "../node_modules/openzeppelin-solidity/contracts/payment/PullPayment.sol";
 import "./usingOraclize.sol";
 
 /*
@@ -20,18 +18,19 @@ reader is more important than simplicity for the writer, and simplicity for
 readers with low prior experience with Vyper (and low prior experience with
 programming in general) is particularly important.
 
-For this reason, the following design descisions are used (most of the below is
+For this reason, the following design descisions are used (a lot of the below is
 paraphrased from the Vyper documention):
+  - The above modules will be moved inline later to improve readability (and to
+    help with verifying code on Etherscan)
   - Bounds and overflow checking will be performed on all arithmetic and array
     access operations
-  - No inheritance, for reasons similar to those of modifiers
   - No inline assembly, as it removes the ability to search for a variable name
     to find all instances of its modification. Furthermore, assembly is not
     readable to those unfamiliar with it
   - No function or operator overloading, since it is easy to write misleading
     code and
   - No recursive calling, as it prevents setings upper bounds on gas limits
-  - No infinite length loops, as they prevent setting upper bounds on gas limits
+    (exception here is using Oraclize to schedule weekly API calls)
 
 Rules
   - NFL season begins Thursday, September 6, 2018, at 8:20 pm EST
@@ -450,7 +449,7 @@ contract Survivor is Pausable, usingOraclize {
 
   function getEnteredPlayers()
     public
-    constant
+    view
     returns(address[])
   {
     return playersEntered;
@@ -459,7 +458,7 @@ contract Survivor is Pausable, usingOraclize {
 
   function getNumberOfPlayers()
     public
-    constant
+    view
     returns(uint256)
   {
     return playersEntered.length;
@@ -468,7 +467,7 @@ contract Survivor is Pausable, usingOraclize {
 
   function getContractBalance()
     public
-    constant
+    view
     returns(uint256)
   {
     return address(this).balance;
@@ -477,7 +476,7 @@ contract Survivor is Pausable, usingOraclize {
 
   function getTime()
     public
-    constant
+    view
     returns(uint256)
   {
     return block.timestamp;

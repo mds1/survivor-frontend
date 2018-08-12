@@ -71,7 +71,7 @@ export default {
 
   async setPlayers(context) {
     // get list of platers
-    const players = await survivor.methods.getPlayers().call();
+    const players = await survivor.methods.getEnteredPlayers().call();
     // commit state mutation
     context.commit('SET_PLAYERS', players);
   },
@@ -81,5 +81,12 @@ export default {
     const balance = await web3.eth.getBalance(survivor.options.address);
     // commit state mutation
     context.commit('SET_BALANCE', web3.utils.fromWei(balance, 'ether'));
+  },
+
+  async setEntryFee(context) {
+    // get list of platers
+    const entryFee = await survivor.methods.ENTRY_FEE().call();
+    // commit state mutation
+    context.commit('SET_ENTRY_FEE', web3.utils.fromWei(entryFee, 'ether'));
   },
 };

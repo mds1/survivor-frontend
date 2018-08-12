@@ -4,12 +4,12 @@
 
 /* BEGIN Sample config.js file:
 ----------------------------------------------------------------------------------------------
-const constants = {
+const keys = {
   INFURA_API_KEY: 'PasteYourKeyHere',
   mnemonic: 'Paste your seed phrase here',
 }
 
-module.exports = constants
+module.exports = keys
 ----------------------------------------------------------------------------------------------
 END Sample config.js file: */
 

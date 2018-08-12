@@ -8,7 +8,7 @@
       <form @submit.prevent='formSubmitted'>
 
         <!-- button to send transaction -->
-        <q-btn :loading='txsent' color="primary" text-color="text2" :disabled='$v.$invalid || txsent' v-model='txsent'>
+        <q-btn :loading='txsent' color="primary" text-color="text2" :disabled='txsent' v-on:click="formSubmitted">
           Join the pool!
           <!-- configure button appearance for pending transactions  -->
           <q-spinner slot="loading" />
@@ -24,14 +24,11 @@
 /* eslint-disable */
 import survivor from '@ethereum/survivorInstance.js'
 import web3 from '@ethereum/web3'
-import { required, minValue } from 'vuelidate/lib/validators'
 import * as functions from '@common/functions.js'
 
 export default {
   data() {
     return {
-      value: 0, // default
-      minValue: 0.005, // minimum allowed value defined in contract
       txsent: false,
       txhash: '',
       requiredNetwork: this.$store.state.network.required,
@@ -41,29 +38,22 @@ export default {
   // props: ['network'],
 
   validations: {
-    // // validate value entered into input field
-    // value: {
-    //   required,
-    //   minValue(value) {
-    //     return minValue(this.minValue)(value)
-    //   },
-    // },
   },
 
   methods: {
     async formSubmitted() {
-      // validate data and state, and then send the transaction
+      // Validate data and state, and then send the transaction
 
       let _this = this // used to access props within promise
       this.txsent = true // update status of transaction
 
-      // define variables used to store alert message windows
+      // Define variables used to store alert message windows
       // let waitingAlert
       // let sentAlert
       // let failedAlert // eslint-disable-line no-unused-vars
       // let confirmedAlert // eslint-disable-line no-unused-vars
 
-      // get list of accounts to send tx
+      // Get list of accounts to send tx
       const accounts = await web3.eth.getAccounts()
 
       // CHECK NUMBER 1: ensure account is unlocked
@@ -89,13 +79,13 @@ export default {
       }
 
       // NOW BOTH CHECKS PASSED: continue with transaction
-      // generate alert that transaction will be sent
+      // Generate alert that transaction will be sent
       const waitingHTML = '<br><br>Please confirm the transasction using the pop-up MetaMask dialog<br><br><br>'
       functions.createTXAlert(waitingHTML, 'info')
 
-      // send tx, with assumption that the first account is the account to send tx from
-      const valueInWei = web3.utils.toWei(String(this.value), 'ether')
-      await survivor.methods.enterLottery().send({
+      // Send tx, with assumption that the first account is the account to send tx from
+      const valueInWei = web3.utils.toWei(String(this.$store.state.contract.entryFee), 'ether')
+      await survivor.methods.joinPool().send({
         from: accounts[0],
         value: valueInWei,
       })
@@ -202,6 +192,7 @@ export default {
     }, // end formSubmitted
   }, // end methods
 } // end export default
+
 </script>
 
 <style lang="stylus" scoped>

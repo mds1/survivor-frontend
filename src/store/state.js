@@ -16,6 +16,8 @@ export default {
   contract: {
     owner: '', // address of who deployed contract
     players: [], // list of entered addresses
+    picks: [], // array of arrays, storing the picks for each player
     balance: '', // contract balance
+    entryFee: '', // required amount to join
   },
 };
