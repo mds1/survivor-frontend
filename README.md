@@ -1,4 +1,4 @@
-Designed for the ConsenSys Academy 2018 Developer Program Final Project. The backend code can be found [here](https://github.com/mds1/survivor-backend)
+(Work in progress). Designed for the ConsenSys Academy 2018 Developer Program Final Project. The backend code can be found [here](https://github.com/mds1/survivor-backend)
 
 # NFL Survivor Dapp
 Not familiar with Survivor leagues? Here's how to play:
@@ -13,7 +13,15 @@ Not familiar with Survivor leagues? Here's how to play:
   * If there is a tie at the end of the season, the remaining players split the pot evenly
 
 ## Config.js
-Explain this.....
+To build/deploy this project you will need to create a file in the project root called `config.js` that looks like this:
+```JavaScript
+const keys = {
+  infuraAPIKey: 'your infura key',
+  mnemonic: 'your mnemonic phrase',
+};
+
+module.exports = keys;
+```
 
 ## Getting Started
 To run a copy of this locally on a development server:

@@ -15,7 +15,7 @@
 // Import keys and mnemonic
 const keys = require('./config');
 
-const { INFURA_API_KEY, mnemonic } = keys;
+const { infuraAPIKey, mnemonic } = keys;
 
 const HDWalletProvider = require('truffle-hdwallet-provider');
 
@@ -34,7 +34,7 @@ module.exports = {
       network_id: 4,
       provider() {
         /* eslint-disable-next-line no-new */
-        return new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/${INFURA_API_KEY}`);
+        return new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/${infuraAPIKey}`);
       },
     },
   },
