@@ -151,7 +151,7 @@ contract('Survivor', (accounts) => {
     const nplayers = String(3);
 
     // Confirm results (convert from BigNumber to String)
-    const numPlayersEntered = String(await survivor.numPlayersEntered());
+    const numPlayersEntered = String(await survivor.getNumberOfPlayers());
     const numPlayersRemaining = String(await survivor.numPlayersRemaining());
 
     // using this approach to get contract balance because for some reason

@@ -1,3 +1,5 @@
+Designed for the ConsenSys Academy 2018 Developer Program Final Project. The backend code can be found [here](https://github.com/mds1/survivor-backend)
+
 # NFL Survivor Dapp
 Not familiar with Survivor leagues? Here's how to play:
 
@@ -49,11 +51,11 @@ This section explains the architecture used for the three parts of this applicat
 * Calls to the server are made using [Oraclize](http://www.oraclize.it/) in order to ensure data integrity. Oraclize also simplifies the process of scheduling weekly calls to the server to get results
 
 
-
 ## Updates on the Way!
-Over the next few weeks, this template will be updated with the following features:
+Over the next few weeks, this site will be updated with the following features:
 * [ ] Addition of a "status" area on the site to ensure it is very clear whether or not they are successfully connected to [MetaMask](https://metamask.io/)
 * [ ] Completion of the "Smart Contract" tab to display the contract source code
 
 ## Acknowledgements
 * Big thanks to the [MySportsFeed](https://www.mysportsfeeds.com/) team for providing a free/inexpensive API to obtain sports data
+* Thanks to [OpenZeppelin](https://openzeppelin.org/) for their awesome library of smart contract
