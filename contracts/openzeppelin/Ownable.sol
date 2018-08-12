@@ -40,7 +40,7 @@ contract Ownable {
    * modifier anymore.
    */
   function renounceOwnership() public onlyOwner {
-    emit OwnershipRenounced(owner);
+    OwnershipRenounced(owner);
     owner = address(0);
   }
 
@@ -58,7 +58,7 @@ contract Ownable {
    */
   function _transferOwnership(address _newOwner) internal {
     require(_newOwner != address(0));
-    emit OwnershipTransferred(owner, _newOwner);
+    OwnershipTransferred(owner, _newOwner);
     owner = _newOwner;
   }
 }

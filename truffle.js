@@ -12,6 +12,13 @@
  *   },
  */
 
+// Import keys and mnemonic
+const keys = require('./config');
+
+const { INFURA_API_KEY, mnemonic } = keys;
+
+const HDWalletProvider = require('truffle-hdwallet-provider');
+
 module.exports = {
   // See <http://truffleframework.com/docs/advanced/configuration>
   // to customize your Truffle configuration!
@@ -21,5 +28,14 @@ module.exports = {
       port: 8545,
       network_id: '*', // match any network id
     },
-  }
+    rinkeby: {
+      host: '127.0.0.1', // localhost
+      port: 8545,
+      network_id: 4,
+      provider() {
+        /* eslint-disable-next-line no-new */
+        return new HDWalletProvider(mnemonic, `https://rinkeby.infura.io/${INFURA_API_KEY}`);
+      },
+    },
+  },
 };

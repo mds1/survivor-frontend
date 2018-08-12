@@ -9,7 +9,6 @@ import "./openzeppelin/SafeMath.sol";
 import "./openzeppelin/PullPayment.sol";
 import "./usingOraclize.sol";
 
-
 /*
 
 This contract attempts to follow one of the goals of Vyper, which the Vyper
@@ -232,7 +231,7 @@ contract Survivor is Pausable, usingOraclize {
     currentWeekGameEnd = FIRST_WEEK_GAME_END;
 
     // Set Oraclize proof type
-    // oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
+    oraclize_setProof(proofType_TLSNotary | proofStorage_IPFS);
 
     // Set gas price for Oraclize callback
     oraclize_setCustomGasPrice(gasPriceForOraclize);
@@ -272,7 +271,7 @@ contract Survivor is Pausable, usingOraclize {
     numPlayersRemaining = numPlayersRemaining.add(1);
     // players[msg.sender].picks defaults to all false, so doesn't need to be updated
 
-    emit LogNewPlayerJoined(msg.sender);
+    LogNewPlayerJoined(msg.sender);
 
   } // end joinPool
 
@@ -303,7 +302,7 @@ contract Survivor is Pausable, usingOraclize {
     // Update their history of picks
     players[msg.sender].picks[_team] = true;
 
-    emit LogPickMade(msg.sender, _team);
+    LogPickMade(msg.sender, _team);
 
   } // end makePick
 
@@ -328,7 +327,7 @@ contract Survivor is Pausable, usingOraclize {
     uint newteam = _team;
     // TODO -- not yet implemented
 
-    emit LogPickChanged(msg.sender, oldteam, newteam);
+    LogPickChanged(msg.sender, oldteam, newteam);
 
   } // end changePick
 
@@ -347,16 +346,16 @@ contract Survivor is Pausable, usingOraclize {
     // Checks handled with modifiers
 
     // Send query
-    // bytes32 queryId = oraclize_query(
-    //   "nested",
-    //   "[URL] ['json(https://api.random.org/json-rpc/1/invoke).result.random[\"data\"]', '\\n{\"jsonrpc\": \"2.0\", \"method\": \"generateSignedIntegers\", \"params\": { \"apiKey\": \"${[decrypt] BOxGYn1YIfhJZHTFQKSKZ/G5K2eeUwOnlCZeOOlNdm3ZKoguY0DLeJxaOqHl66GgmTqd7NEYY2g6omOhCguFQUZlz3CyQk8WmEZ5FKWfznFTFCHKkR1CPFoezErj84ukyOnwt6aNAaSJhB5gMWceBRvjVDH/}\", \"n\": 1, \"min\": 1, \"max\": 1000, \"replacement\": true, \"base\": 10${[identity] \"}\"}, \"id\": 14215${[identity] \"}\"}']"
-    // );
+    bytes32 queryId = oraclize_query(
+      "nested",
+      "[URL] ['json(https://api.random.org/json-rpc/1/invoke).result.random[\"data\"]', '\\n{\"jsonrpc\": \"2.0\", \"method\": \"generateSignedIntegers\", \"params\": { \"apiKey\": \"${[decrypt] BOxGYn1YIfhJZHTFQKSKZ/G5K2eeUwOnlCZeOOlNdm3ZKoguY0DLeJxaOqHl66GgmTqd7NEYY2g6omOhCguFQUZlz3CyQk8WmEZ5FKWfznFTFCHKkR1CPFoezErj84ukyOnwt6aNAaSJhB5gMWceBRvjVDH/}\", \"n\": 1, \"min\": 1, \"max\": 1000, \"replacement\": true, \"base\": 10${[identity] \"}\"}, \"id\": 14215${[identity] \"}\"}']"
+    );
 
     // Add query ID to mapping
-    // validIds[queryId] = true;
+    validIds[queryId] = true;
 
     // Log that query was sent
-    emit LogOraclizeQuery("Oraclize query was sent, standing by for the answer..");
+    LogOraclizeQuery("Oraclize query was sent, standing by for the answer..");
 
   } // end
 
@@ -425,7 +424,7 @@ contract Survivor is Pausable, usingOraclize {
     remainingPlayers = [0x0000000000000000000000000000000000000000];
 
     // log the new number that was obtained
-    emit LogRemainingPlayersReceived(remainingPlayers);
+    LogRemainingPlayersReceived(remainingPlayers);
 
     // EFFECTS
     // Get results from Oracle

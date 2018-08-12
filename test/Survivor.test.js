@@ -247,7 +247,7 @@ contract('Survivor', (accounts) => {
     // make sure owner is accounts[0]
     expect(owner).to.be.equal(accounts[0]);
     // try to change owner
-    await survivor.transferOwnership(accounts[9], {
+    await survivor.transferOwnership(accounts[8], {
       from: accounts[0],
     });
     // get new owner

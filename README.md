@@ -17,19 +17,19 @@ Explain this.....
 
 ## Getting Started
 To run a copy of this locally on a development server:
-1. Install [Gananche CLI](https://github.com/trufflesuite/ganache-cli) using `npm install -g ganache-cli`
-2. Install [Truffle](https://github.com/trufflesuite/truffle) using `npm install -g truffle`
-3. Run `npm install`
-4. Run `quasar dev`
+1. Run `npm install`
+2. Run `quasar dev` (this will get you up and running using the copy of this contract on the Rinkeby network)
 
 ## Testing
 If you'd like to run the tests, there's a few extra setup steps
 1. Either `git clone` or download [ethereum-bridge](https://github.com/oraclize/ethereum-bridge) somewhere on your computer _outside_ of this folder
 2. Run `npm install` within that folder
+3. Install [Gananche CLI](https://github.com/trufflesuite/ganache-cli) using `npm install -g ganache-cli`
+4. Install [Truffle](https://github.com/trufflesuite/truffle) using `npm install -g truffle@4.1.3` (newer versions of Truffle will not work, as Oraclize is only compatible with versions of Solidity <= 0.4.20, and Truffle versions are currently tied to specific Solidity versions)
 
 Then, to run tests:
 1. From within this project's folder, start up ganache-cli using `ganache-cli -d`
-2. In a separate terminal window, start up ethereum-bridge using `node bridge -H localhost:8545 -a 9 --dev`
+2. In a separate terminal window, navigate to the `ethereum-bridge` folder and start up ethereum-bridge using `node bridge -H localhost:8545 -a 9 --dev`
    * If interested, you can read more about this command in the ethereum-bridge docs and in [this](https://medium.com/coinmonks/using-apis-in-your-ethereum-smart-contract-with-oraclize-95656434292e) article
 3. In a third terminal window, run tests with `truffle test`
 

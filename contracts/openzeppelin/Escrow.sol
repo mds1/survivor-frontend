@@ -31,7 +31,7 @@ contract Escrow is Ownable {
     uint256 amount = msg.value;
     deposits[_payee] = deposits[_payee].add(amount);
 
-    emit Deposited(_payee, amount);
+    Deposited(_payee, amount);
   }
 
   /**
@@ -46,6 +46,6 @@ contract Escrow is Ownable {
 
     _payee.transfer(payment);
 
-    emit Withdrawn(_payee, payment);
+    Withdrawn(_payee, payment);
   }
 }
