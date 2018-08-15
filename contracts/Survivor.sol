@@ -88,16 +88,21 @@ contract Survivor is Pausable, usingOraclize {
   // integer 1-17, NFL week number
   uint256 public currentWeek;
   // to avoid strings, use numbers to alphabetically map the teams, such that:
-  //   ARI	-- 0    DAL -- 8     LAC -- 16    OAK -- 24
-  //   ATL	-- 1    DEN -- 9     LAR -- 17    PHI -- 25
-  //   BAL	-- 2    DET -- 10    MIA -- 18    PIT -- 26
-  //   BUF	-- 3    GB	-- 11    MIN -- 19    SEA -- 27
-  //   CAR	-- 4    HOU -- 12    NE	 -- 20    SF	-- 28
-  //   CHI	-- 5    IND -- 13    NO	 -- 21    TB  -- 29
-  //   CIN	-- 6    JAX -- 14    NYG -- 22    TEN -- 30
-  //   CLE	-- 7    KC	-- 15    NYJ -- 23    WAS -- 31
+  //   ARI	-- 1    DAL -- 9     LAC -- 17    OAK -- 25
+  //   ATL	-- 2    DEN -- 10    LAR -- 18    PHI -- 26
+  //   BAL	-- 3    DET -- 11    MIA -- 19    PIT -- 27
+  //   BUF	-- 4    GB	-- 12    MIN -- 20    SEA -- 28
+  //   CAR	-- 5    HOU -- 13    NE	 -- 21    SF	-- 29
+  //   CHI	-- 6    IND -- 14    NO	 -- 22    TB  -- 30
+  //   CIN	-- 7    JAX -- 15    NYG -- 23    TEN -- 31
+  //   CLE	-- 8    KC	-- 16    NYJ -- 24    WAS -- 32
+
+  // Teams start at 1 since uints will default to a value of 0. This helps
+  // distringuish between a pick of ARI vs. no pick
+
+
   uint256 constant NUMBER_OF_TEAMS = 32;
-  uint256[NUMBER_OF_TEAMS] TEAMS = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
+  uint256[NUMBER_OF_TEAMS] TEAMS = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32];
 
 
   // Variables for making weekly picks -----------------------------------------
@@ -212,7 +217,7 @@ contract Survivor is Pausable, usingOraclize {
   // ===========================================================================
   //                                Constructor
   // ===========================================================================
-  function Survivor(uint256 _entryFee, uint256 _entryDeadline, uint256 _firstWeekGameEnd)
+  constructor(uint256 _entryFee, uint256 _entryDeadline, uint256 _firstWeekGameEnd)
     public
   {
 
@@ -270,7 +275,7 @@ contract Survivor is Pausable, usingOraclize {
     numPlayersRemaining = numPlayersRemaining.add(1);
     // players[msg.sender].picks defaults to all false, so doesn't need to be updated
 
-    LogNewPlayerJoined(msg.sender);
+    emit LogNewPlayerJoined(msg.sender);
 
   } // end joinPool
 
@@ -293,7 +298,7 @@ contract Survivor is Pausable, usingOraclize {
     // smart contract logic complicated and gas costs get expensive
 
     // Make sure valid team is selected
-    require(_team >= 0 && _team <= 31);
+    require(_team >= 1 && _team <= 32);
 
     // EFFECTS
     // Update the players current pick
@@ -301,7 +306,7 @@ contract Survivor is Pausable, usingOraclize {
     // Update their history of picks
     players[msg.sender].picks[_team] = true;
 
-    LogPickMade(msg.sender, _team);
+    emit LogPickMade(msg.sender, _team);
 
   } // end makePick
 
@@ -326,7 +331,7 @@ contract Survivor is Pausable, usingOraclize {
     uint newteam = _team;
     // TODO -- not yet implemented
 
-    LogPickChanged(msg.sender, oldteam, newteam);
+    emit LogPickChanged(msg.sender, oldteam, newteam);
 
   } // end changePick
 
@@ -354,7 +359,7 @@ contract Survivor is Pausable, usingOraclize {
     validIds[queryId] = true;
 
     // Log that query was sent
-    LogOraclizeQuery("Oraclize query was sent, standing by for the answer..");
+    emit LogOraclizeQuery("Oraclize query was sent, standing by for the answer..");
 
   } // end
 
@@ -423,7 +428,7 @@ contract Survivor is Pausable, usingOraclize {
     remainingPlayers = [0x0000000000000000000000000000000000000000];
 
     // log the new number that was obtained
-    LogRemainingPlayersReceived(remainingPlayers);
+    emit LogRemainingPlayersReceived(remainingPlayers);
 
     // EFFECTS
     // Get results from Oracle
@@ -465,6 +470,24 @@ contract Survivor is Pausable, usingOraclize {
   }
 
 
+  function getPlayersPick(address _player)
+    public
+    view
+    returns(uint256)
+  {
+    return players[_player].currentPick;
+  }
+
+
+  function getPlayersPickHistory(address _player)
+    public
+    view
+    returns(bool[32])
+  {
+    return players[_player].picks;
+  }
+
+
   function getContractBalance()
     public
     view
@@ -481,5 +504,6 @@ contract Survivor is Pausable, usingOraclize {
   {
     return block.timestamp;
   }
+
 
 }

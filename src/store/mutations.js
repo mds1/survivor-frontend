@@ -36,8 +36,9 @@ export default {
     state.contract.owner = address;
   },
 
-  SET_PLAYERS(state, players) {
-    state.contract.players = players;
+  SET_PLAYERS(state, obj) {
+    state.contract.players = obj.players;
+    state.contract.picks = obj.picks;
   },
 
   SET_BALANCE(state, balance) {

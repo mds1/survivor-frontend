@@ -1,4 +1,4 @@
-// set of functions that get used with the EnterForm.vue template
+// set of functions that get used with the JoinPool.vue template
 // place this file in the src/components/common folder
 
 import { Notify } from 'quasar';
@@ -32,6 +32,45 @@ export async function currentNetwork() {
     default:
       return 'an unknown network';
   }
+}
+
+export function getTeams(integer) {
+  // Return team based on input integer
+  const mapping = {
+    1: 'Arizona Cardinals',
+    2: 'Atlanta Falcons',
+    3: 'Baltimore Ravens',
+    4: 'Buffalo Bills',
+    5: 'Carolina Panthers',
+    6: 'Chicago Bears',
+    7: 'Cincinnati Bengals',
+    8: 'Cleveland Browns',
+    9: 'Dallas Cowboys',
+    10: 'Denver Broncos',
+    11: 'Detroit Lions',
+    12: 'Green Bay Packers',
+    13: 'Houston Texans',
+    14: 'Indianapolis Colts',
+    15: 'Jacksonville Jaguars',
+    16: 'Kansas City Chiefs',
+    17: 'Los Angeles Charger', // LA chargers
+    18: 'Los Angeles Rams', // LA rams (not LAR, since MySportsFeed uses LA)
+    19: 'Miami Dolphins',
+    20: 'Minnesota Vikings',
+    21: 'New England Patriots',
+    22: 'New Orleans Saints',
+    23: 'New York Giants',
+    24: 'New York Jets',
+    25: 'Oakland Raiders',
+    26: 'Philadelphia Eagles',
+    27: 'Pittsburgh Steelers',
+    28: 'Seattle Seahawks',
+    29: 'San Francisco 49ers',
+    30: 'Tampa Bay Buccaneers',
+    31: 'Tennessee Titans',
+    32: 'Washington Redskins',
+  };
+  return mapping[integer];
 }
 
 export function createEtherscanAddressLink(network, address) {

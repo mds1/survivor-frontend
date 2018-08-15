@@ -168,7 +168,7 @@ contract('Survivor', (accounts) => {
   // TESTS FOR MAKING PICKS ----------------------------------------------------
   // check that players can make picks before the deadline
   it('allows players to make picks before the pick deadline', async () => {
-    const result = await makePick(0, accounts[0]);
+    const result = await makePick(1, accounts[0]);
     expect(result.receipt.status).to.equal('0x1');
   });
 
@@ -185,8 +185,8 @@ contract('Survivor', (accounts) => {
   it('prevents players from making picks with invalid teams', async () => {
     // this test is looking for a failed entry
     const makePickFailure = async function () {
-      // use integer less than 0 or greater than 31 for testing
-      await makePick(-1, accounts[1]);
+      // use integer less than 1 or greater than 32 for testing
+      await makePick(0, accounts[1]);
     };
     return expect(makePickFailure()).to.be.rejectedWith(Error);
   });

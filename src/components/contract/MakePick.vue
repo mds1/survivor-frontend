@@ -3,13 +3,19 @@
   <div>
     <div class="form">
 
-      <h5>Join now for 0.10 ETH!</h5>
-
       <form @submit.prevent='formSubmitted'>
+
+        <q-select
+        v-model="pick"
+        :options="teams"
+        float-label="Select team for this week (selection cannot be changed after submitting)"
+        placeholder="Select team for this week (selection cannot be changed after submitting)"
+        :dark=true
+        />
 
         <!-- button to send transaction -->
         <q-btn :loading='txsent' color="primary" text-color="text2" :disabled='txsent' v-on:click="formSubmitted">
-          Join the pool!
+          Submit pick
           <!-- configure button appearance for pending transactions  -->
           <q-spinner slot="loading" />
           <span slot="loading">&nbsp;&nbsp;Transaction pending...</span>
@@ -32,10 +38,21 @@ export default {
       txsent: false,
       txhash: '',
       requiredNetwork: this.$store.state.network.required,
+      pick: '',
+      teams: []
     }
   },
 
-  // props: ['network'],
+  created() {
+    // Generate list of teams
+    for (let i=1; i<33; i++) {
+      const team = functions.getTeams(i);
+      this.teams.push({
+        label: team,
+        value: i
+      })
+    }
+  },
 
   validations: {
   },
@@ -46,12 +63,6 @@ export default {
 
       let _this = this // used to access props within promise
       this.txsent = true // update status of transaction
-
-      // Define variables used to store alert message windows
-      // let waitingAlert
-      // let sentAlert
-      // let failedAlert // eslint-disable-line no-unused-vars
-      // let confirmedAlert // eslint-disable-line no-unused-vars
 
       // Get list of accounts to send tx
       const accounts = await web3.eth.getAccounts()
@@ -138,7 +149,7 @@ export default {
               //     at new Promise (webpack-internal:///./node_modules/bluebird/js/browser/bluebird.js:2845:10)
               //     at PromiEvent (webpack-internal:///./node_modules/web3-core-promievent/src/index.js:35:24)
               //     at Eth.send [as getTransactionReceipt] (webpack-internal:///./node_modules/web3-core-method/src/index.js:446:21)
-              //     at Promise.eval (webpack-internal:///./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/contract/EnterForm.vue:111:87)
+              //     at Promise.eval (webpack-internal:///./node_modules/babel-loader/lib/index.js!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./src/components/contract/JoinPool.vue:111:87)
               //     at Promise.emit (webpack-internal:///./node_modules/eventemitter3/index.js:116:35)
               //     at eval (webpack-internal:///./node_modules/web3-core-method/src/index.js:346:44)
               // From previous event:

@@ -72,8 +72,24 @@ export default {
   async setPlayers(context) {
     // get list of platers
     const players = await survivor.methods.getEnteredPlayers().call();
+
+    // define array to hold the promises used to get the picks
+    const pickPromises = [];
+
+    // For each player, get their pick (there is probably a better way to do this)
+    for (let i = 0; i < players.length; i++) {
+      const player = players[i];
+      const pickPromise = survivor.methods.getPlayersPick(player).call();
+      pickPromises.push(pickPromise);
+    }
+    // Resolve promises
+    let picks = await Promise.all(pickPromises);
+    // Convert to integers
+    picks = picks.map(x => parseInt(x, 10));
+
     // commit state mutation
-    context.commit('SET_PLAYERS', players);
+    const data = { players, picks };
+    context.commit('SET_PLAYERS', data);
   },
 
   async setBalance(context) {

@@ -12,8 +12,15 @@
     <p> {{ this.$store.state.contract.balance }} ETH up for grabs!</p>
 
 
-    <app-enter-form/>
+    <div v-if=playerHasJoined>
+      <app-join-pool/>
+    </div>
+    <div v-else>
+      <app-make-pick/>
+    </div>
+
     <br>
+
     <app-deadline/>
 
   </div>
@@ -21,18 +28,21 @@
 
 <script>
 import survivor from '@ethereum/survivorInstance.js';
-import EnterForm from '@contract/EnterForm.vue';
+import JoinPool from '@contract/JoinPool.vue';
+import MakePick from '@contract/MakePick.vue';
 import Deadline from '@contract/Deadline.vue';
 
 export default {
   data() {
     return {
       contract: survivor,
+      playerHasJoined: false,
     };
   },
 
   components: {
-    appEnterForm: EnterForm,
+    appJoinPool: JoinPool,
+    appMakePick: MakePick,
     appDeadline: Deadline,
   },
 
