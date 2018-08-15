@@ -105,4 +105,17 @@ export default {
     // commit state mutation
     context.commit('SET_ENTRY_FEE', web3.utils.fromWei(entryFee, 'ether'));
   },
+
+  async setUserHasJoined(context) {
+    // get list of platers
+    const allplayers = await survivor.methods.getEnteredPlayers().call();
+    // ensure all addresses are lowercase
+    const players = allplayers.map(x => x.toLowerCase());
+    // get player who is on the site and check if they have joined
+    const accounts = await web3.eth.getAccounts();
+    const userHasJoined = players.includes(accounts[0].toLowerCase());
+
+    // commit state mutation
+    context.commit('SET_USER_HAS_JOINED', userHasJoined);
+  },
 };

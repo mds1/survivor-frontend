@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { getTeams } from '@common/functions';
+import { integer2team } from '@common/functions';
 
 export default {
   data() {
@@ -25,7 +25,7 @@ export default {
         {
           name: 'players',
           required: true,
-          label: 'Players',
+          label: 'Remaining Players',
           align: 'left',
           field: 'player',
           sortable: true,
@@ -61,7 +61,7 @@ export default {
       for (let i = 0; i < players.length; i++) {
         const player = players[i];
         const int = this.$store.state.contract.picks[i];
-        const pick = int !== 0 ? getTeams(int) : 'No team selected';
+        const pick = int !== 0 ? integer2team(int) : 'No team selected';
         // Push pick to table data
         tableData.push({
           player,

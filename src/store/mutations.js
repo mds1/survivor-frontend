@@ -48,4 +48,8 @@ export default {
   SET_ENTRY_FEE(state, entryFee) {
     state.contract.entryFee = entryFee;
   },
+
+  SET_USER_HAS_JOINED(state, userHasJoined) {
+    state.contract.userHasJoined = userHasJoined;
+  },
 };

@@ -19,5 +19,6 @@ export default {
     picks: [], // array of arrays, storing the picks for each player
     balance: '', // contract balance
     entryFee: '', // required amount to join
+    userHasJoined: false, // bool, has this visitor joined the pool
   },
 };

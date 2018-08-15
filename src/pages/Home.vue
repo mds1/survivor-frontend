@@ -11,8 +11,7 @@
     <p>{{ this.$store.state.contract.players.length }} players entered</p>
     <p> {{ this.$store.state.contract.balance }} ETH up for grabs!</p>
 
-
-    <div v-if=playerHasJoined>
+    <div v-if=!this.$store.state.contract.userHasJoined>
       <app-join-pool/>
     </div>
     <div v-else>
@@ -36,7 +35,6 @@ export default {
   data() {
     return {
       contract: survivor,
-      playerHasJoined: false,
     };
   },
 
@@ -51,6 +49,7 @@ export default {
     this.$store.dispatch('setPlayers'); // get list of players
     this.$store.dispatch('setBalance'); // get contract balance
     this.$store.dispatch('setEntryFee'); // get contract balance
+    this.$store.dispatch('setUserHasJoined'); // has the visitor joined the pool
   },
 };
 </script>

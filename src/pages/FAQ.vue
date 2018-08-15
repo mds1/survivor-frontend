@@ -2,7 +2,8 @@
   <!-- if you want automatic padding use "layout-padding" class -->
   <div class="layout-padding">
     <!-- TODO: Finish implementing an FAQ page -->
-    <p>FAQ</p>
+    <h2>FAQ</h2>
+    <p>Coming soon...</p>
 
     <!--
     Questions to consider including

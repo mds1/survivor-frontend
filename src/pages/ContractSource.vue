@@ -5,11 +5,14 @@
     <h3>Smart Contract Source Code</h3>
     <p>This smart contract is located at
       <a :href='this.addressURL' target='_blank'>{{ this.address }}</a>
+      <br>
+      <br>
+      In-line source code coming soon...
     </p>
 
     <pre>
       <code>
-      {{ this.code }}
+      <!-- {{ this.code }} -->
       </code>
     </pre>
 
@@ -48,6 +51,7 @@ export default {
 
 <style lang="stylus">
 @import '~variables';
+
 pre, code {
   // why "monospace, monospace"? see https://stackoverflow.com/questions/38781089/font-family-monospace-monospace
   font-family: monospace, monospace;
