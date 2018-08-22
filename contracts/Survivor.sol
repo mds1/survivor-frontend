@@ -137,26 +137,21 @@ contract Survivor is Pausable, usingOraclize {
   // address of the winners
   address[] public winningPlayers;
 
+  // Use states to determine what to do with remaining players each week
+  // (see __callback function for more info)
+  enum State { PrepareForNextWeek, PayOneWinner, PayMultipleWinners };
+  State state = State.PrepareForNextWeek;
 
   // Variables for Oraclize ----------------------------------------------------
   mapping(bytes32 => bool) validIds; // used for validating Query IDs
   uint constant gasPriceForOraclize = 15000000000 wei; // for Oraclize callback, 15 Gwei
 
-  // Contract States -----------------------------------------------------------
-  // define possible states of the contract
-  //   Entry           -- users can enter the pool, and can also make their
-  //                      picks for the first week
-  //   MakePicks       -- users submit their picks for who they think will win
-  //                      this week
-  //   WaitForGames    -- nothing happens here, we just wait for all of that
-  //                      week's games to be completed
-  //   DetermineResult -- contract determines weekly winners and eliminates
-  //                      players accordingly
-  //   Final           -- a winning condition, as described above, has been met
-
 
   // Administrative variables --------------------------------------------------
   // Contract ownership handled by Ownable
+
+  // Keep track of when game ends to prevent further contract interaction
+  bool isGameOver = false;
 
 
   // ===========================================================================
@@ -182,34 +177,49 @@ contract Survivor is Pausable, usingOraclize {
 
   // Ensure entry deadline has not passed
   modifier onlyBeforeEntryDeadline() {
-    require(now <= ENTRY_DEADLINE);
+    require(
+      now <= ENTRY_DEADLINE,
+      "The entry deadline has passed, so this function cannot be called");
     _;
   }
 
   // Ensure pick deadline has not passed
   modifier onlyBeforePickDeadline() {
-    require(now <= currentPickDeadline);
+    require(
+      now <= currentPickDeadline,
+      "The weekly pick deadline has passed, so this function cannot be called");
     _;
   }
 
   // Ensure caller has not been eliminated
   modifier onlyPlayersWhoJoined() {
     require(
-      players[msg.sender].hasJoined);
+      players[msg.sender].hasJoined,
+      "Only players who have not been eliminated can call this function");
     _;
   }
 
   // Ensure team has not yet been chosen
   modifier onlyAllowNewTeams(uint256 _team) {
     require(
-      !players[msg.sender].picks[_team]);
+      !players[msg.sender].picks[_team],
+      "Teams can only be picked one. Please pick a new team");
     _;
   }
 
   // Ensure all games for this week have ended
   modifier onlyAfterThisWeeksGamesEnd() {
     require(
-      now >= currentWeekGameEnd);
+      now >= currentWeekGameEnd,
+      "This function can only be called once this week's games end");
+    _;
+  }
+
+  // Only allow function calls when game is not over
+  modifier whenGameIsNotOver() {
+    require(
+      !isGameOver,
+      "This function cannot be called because the game is over");
     _;
   }
 
@@ -221,6 +231,7 @@ contract Survivor is Pausable, usingOraclize {
     public
   {
 
+    // EFFECTS
     // Set entry fee
     ENTRY_FEE = _entryFee;
 
@@ -239,6 +250,27 @@ contract Survivor is Pausable, usingOraclize {
 
     // Set gas price for Oraclize callback
     oraclize_setCustomGasPrice(gasPriceForOraclize);
+
+    // At the time of deployment, we kick-off sending weekly Oraclize queries.
+    // First we compute the time remaining until we want to call the API
+    uint timeRemaining = now - currentWeekGameEnd;
+
+
+    // INTERACTIONS
+    // Now we schedule the Oraclize call, which is calls our custom API
+    // deployed on Heroku
+    //   GitLab for this API: https://github.com/mds1/survivor-backend
+    //   Heroku site: https://survivor-backend.herokuapp.com/api/getresults?apikey=My-MySportsFeeds-v2.0-API-Key
+    //
+    //   The query to the API is encrypted to hide my API key (it's easier and
+    //   presumably cheaper to just encrypt the who query instead of only
+    //   encrypting the API key and then using the nested data source)
+    oraclize_query(
+      timeRemaining,
+      "URL",
+      "BLMs5ftOLkLj1AGjL0nuHz/jcEWHvlU5lJ9qtX0MnK9Q+bDAJHL61bjeVZvkTiohthHHCY8pI6s8l8iY+mKGTFlMcuM05BSHOWdxbUHWT9U6Qev72WWWEyDlmJ6wSL53J25xRJ8h24WHahYXGQszc2oWIvsRAXwvAm43J0mIaoQcl1FPaIqe4zxxE7625BiapLQcLen/pdqr6bi+2FLMW8UMV8yxUiATQrLjMgfaoFHAgOCk21lfEzOWxMKzurWYeW0C"
+    );
+
   }
 
 
@@ -260,13 +292,19 @@ contract Survivor is Pausable, usingOraclize {
     payable
     onlyBeforeEntryDeadline
     whenNotPaused
+    whenGameIsNotOver
   {
 
     // CHECKS
     // Ensure required Ether was sent
-    require(msg.value == ENTRY_FEE);
+    require(
+      msg.value == ENTRY_FEE,
+      "The entry fee must be sent to join the pool");
+
     // Ensure this address has not joined already
-    require(!players[msg.sender].hasJoined);
+    require(
+      !players[msg.sender].hasJoined,
+      "You have already joined the pool. Only one entry allowed per player");
 
     // EFFECTS
     // Update variables to indicate that player has joined
@@ -290,6 +328,7 @@ contract Survivor is Pausable, usingOraclize {
     onlyBeforePickDeadline
     onlyAllowNewTeams(_team)
     whenNotPaused
+    whenGameIsNotOver
   {
 
     // CHECKS
@@ -298,13 +337,17 @@ contract Survivor is Pausable, usingOraclize {
     // smart contract logic complicated and gas costs get expensive
 
     // Make sure valid team is selected
-    require(_team >= 1 && _team <= 32);
+    require(
+      _team >= 1 && _team <= 32,
+      "Please select a valid team");
 
     // EFFECTS
     // Update the players current pick
     players[msg.sender].currentPick = _team;
     // Update their history of picks
     players[msg.sender].picks[_team] = true;
+    // Add to remaining players array
+    remainingPlayers.push(msg.sender);
 
     emit LogPickMade(msg.sender, _team);
 
@@ -321,6 +364,7 @@ contract Survivor is Pausable, usingOraclize {
     onlyBeforePickDeadline
     onlyAllowNewTeams(_team)
     whenNotPaused
+    whenGameIsNotOver
   {
 
     // CHECKS
@@ -334,65 +378,6 @@ contract Survivor is Pausable, usingOraclize {
     emit LogPickChanged(msg.sender, oldteam, newteam);
 
   } // end changePick
-
-
-
-  /**
-   * @dev Begins process of getting this weeks results from the server
-   */
-  function getThisWeeksResults()
-    public
-    onlyOwner
-    onlyAfterThisWeeksGamesEnd
-    whenNotPaused
-  {
-    // CHECKS
-    // Checks handled with modifiers
-
-    // Send query
-    bytes32 queryId = oraclize_query(
-      "nested",
-      "[URL] ['json(https://api.random.org/json-rpc/1/invoke).result.random[\"data\"]', '\\n{\"jsonrpc\": \"2.0\", \"method\": \"generateSignedIntegers\", \"params\": { \"apiKey\": \"${[decrypt] BOxGYn1YIfhJZHTFQKSKZ/G5K2eeUwOnlCZeOOlNdm3ZKoguY0DLeJxaOqHl66GgmTqd7NEYY2g6omOhCguFQUZlz3CyQk8WmEZ5FKWfznFTFCHKkR1CPFoezErj84ukyOnwt6aNAaSJhB5gMWceBRvjVDH/}\", \"n\": 1, \"min\": 1, \"max\": 1000, \"replacement\": true, \"base\": 10${[identity] \"}\"}, \"id\": 14215${[identity] \"}\"}']"
-    );
-
-    // Add query ID to mapping
-    validIds[queryId] = true;
-
-    // Log that query was sent
-    emit LogOraclizeQuery("Oraclize query was sent, standing by for the answer..");
-
-  } // end
-
-
-  function prepareForNextWeek()
-    private
-    onlyAfterThisWeeksGamesEnd
-    whenNotPaused
-  {
-    // CHECKS
-    // Ensure only this contract is calling this
-    // Ensure all games for this week have ended
-
-    // Make sure this wasn't the last week
-    require(currentWeek < 17);
-    // Make sure there are players remaining
-    require(numPlayersRemaining > 1);
-
-    // EFFECTS
-    // Update deadlines
-    currentWeek = currentWeek.add(1);
-    currentPickDeadline += 1 weeks;
-    currentWeekGameEnd += 1 weeks;
-  } // end prepareForNextWeek
-
-
-  function preparePayouts()
-    private
-    onlyAfterThisWeeksGamesEnd
-    whenNotPaused
-  {
-
-  }
 
 
 
@@ -412,38 +397,128 @@ contract Survivor is Pausable, usingOraclize {
    * >1 Players| Prepare for next week      | Split pot among remaining players
    * Left      | Outcome: Make picks        | Outcome: Game ends
    * ----------|----------------------------|-----------------------------------*/
-  function __callback(bytes32 queryId, string result, bytes proof) public {
+  function __callback(bytes32 queryId, address[] result, bytes proof)
+    public
+    onlyAfterThisWeeksGamesEnd
+    whenNotPaused
+    whenGameIsNotOver
+  {
+    // CHECKS
     // Only allow Oraclize to call this function
-    // require(msg.sender == oraclize_cbAddress());
+    require(
+      msg.sender == oraclize_cbAddress(),
+      "Only Oraclize can call this function"
+    );
 
     // Validate the query ID
-    require(validIds[queryId]);
+    require(
+      validIds[queryId],
+      "Invalid queryID received"
+    );
 
+    // EFFECTS
     // Reset mapping of this ID to false (this ensures the callback for a given
     // queryID is never called twice)
     validIds[queryId] = false;
 
-    // get the random number, result is of the form: [268]
-    // if we also returned "serialNumber", form would be: [3008768, [268]]
-    remainingPlayers = [0x0000000000000000000000000000000000000000];
+    // Get the array of remaining players
+    remainingPlayers = result;
 
-    // log the new number that was obtained
+    // Log the remaining players
     emit LogRemainingPlayersReceived(remainingPlayers);
 
-    // EFFECTS
-    // Get results from Oracle
-    // If the returned call begins with "T", we have winners
-    // If the returned call begins with "F", we continue on to next week
-    bool weHaveWinners = true;
-
-    // TOP ROW -----------------------------------------------------------------
-    if (weHaveWinners) {
-      preparePayouts();
+    // Determine scenario based on the above table
+    if (remainingPlayers.length == 0) {
+      if (week != 17) {
+        // TOP LEFT
+        state = States.PrepareForNextWeek;
+      } else {
+        // TOP RIGHT
+        state = States.PayMultipleWinners;
+      }
+    } else if (remainingPlayers.length == 1) {
+      // MIDDLE ROW
+      state = States.PayOneWinner;
     } else {
+      if (week != 17) {
+        // BOTTOM LEFT
+        state = States.PrepareForNextWeek;
+      } else {
+        // BOTTOM RIGHT
+        state = States.PayMultipleWinners
+      }
+    }
+
+    // Call appropriate function based on scenarion
+    if (state == States.PrepareForNextWeek) {
       prepareForNextWeek();
+    } else if (state == States.PayOneWinner) {
+      payOneWinner(remainingPlayers);
+    } else { // state == States.PayMultipleWinners
+      payMultipleWinners(remainingPlayers);
     }
 
 
+    // INTERACTIONS
+    // Schedule the next query to oraclize in 1 week, using the same query that
+    // we used in the constructor but with a delay of 1 week (604800 seconds)
+    oraclize_query(
+      604800,
+      "URL",
+      "BLMs5ftOLkLj1AGjL0nuHz/jcEWHvlU5lJ9qtX0MnK9Q+bDAJHL61bjeVZvkTiohthHHCY8pI6s8l8iY+mKGTFlMcuM05BSHOWdxbUHWT9U6Qev72WWWEyDlmJ6wSL53J25xRJ8h24WHahYXGQszc2oWIvsRAXwvAm43J0mIaoQcl1FPaIqe4zxxE7625BiapLQcLen/pdqr6bi+2FLMW8UMV8yxUiATQrLjMgfaoFHAgOCk21lfEzOWxMKzurWYeW0C"
+    );
+  } // end __callback for Oraclize
+
+
+  function prepareForNextWeek()
+    private
+    onlyAfterThisWeeksGamesEnd
+    whenNotPaused
+    whenGameIsNotOver
+  {
+    // CHECKS
+    // Ensure only this contract is calling this
+    // Ensure all games for this week have ended
+
+    // Make sure this wasn't the last week
+    require(
+      currentWeek < 17,
+      "This function cannot be called because it is the last week of the season");
+
+    // Make sure there are players remaining
+    require(
+      numPlayersRemaining > 1,
+      "This function cannot be called because a winner has been determined");
+
+    // EFFECTS
+    // Update deadlines
+    currentWeek = currentWeek.add(1);
+    currentPickDeadline += 1 weeks;
+    currentWeekGameEnd += 1 weeks;
+  } // end prepareForNextWeek
+
+
+  function payOneWinner(address _address)
+    private
+    onlyAfterThisWeeksGamesEnd
+    whenNotPaused
+    whenGameIsNotOver
+  {
+    // EFFECTS
+    // Change state to paused to end the game
+    isGameOver = true;
+  }
+
+
+    function payMultipleWinners(address[] _addresses)
+    private
+    onlyAfterThisWeeksGamesEnd
+    whenNotPaused
+    whenGameIsNotOver
+  {
+    // EFFECTS
+    // Change state to paused to end the game
+    isGameOver = true;
   }
 
 
@@ -458,6 +533,23 @@ contract Survivor is Pausable, usingOraclize {
     returns(address[])
   {
     return playersEntered;
+  }
+
+
+  function getRemainingPlayers()
+    public
+    view
+    returns(address[])
+  {
+    return remainingPlayers;
+  }
+
+  function getWinningPlayers()
+    public
+    view
+    returns(address[])
+  {
+    return winningPlayers;
   }
 
 
