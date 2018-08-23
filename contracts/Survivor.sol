@@ -324,6 +324,15 @@ contract Survivor is Pausable, PullPayment, usingOraclize {
       "You have already joined the pool. Only one entry allowed per player"
     );
 
+    // Limit number of players to (1) prevent an overflow in the array sizes,
+    // and, (2) to prevent the contract payout from growing so large that it
+    // becomes a big target. This check is done with numPlayersRemaining since
+    // it is equal to the number of players that join up until the entry deadline
+    require(
+      numPlayersRemaining <= 100000,
+      "This contract has reached its limit of 100,000 entrants, so no more players can join"
+    );
+
     // EFFECTS
     // Update variables to indicate that player has joined
     // players[msg.sender].picks defaults to all false, so doesn't need to be updated
