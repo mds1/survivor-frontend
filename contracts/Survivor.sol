@@ -44,26 +44,24 @@ Notes
 Notation
   - Constant variables are written in UPPERCASE
 
-Architecture (idea)
+Architecture
   - Upon creating the contract, we define the entry fee and deadline, and a time
     by which all week 1 games are over
+      - During contract creation we schedule the first call to Oraclize
   - We now allow players to join the pool and make week 1 picks
-  - After week 1 games end, we make a query to our server using Oraclize
-      - If number of players remaining = 1, we return the winning address
-      - Otherwise, the server maintains the list of remaining vs. eliminated
-        players and we use that to properly display the front-end
-
+  - After week 1 games end, Oraclize calls __callback and provides results
+      - The existing array of remaining players is used by the API to determine
+        this next set of remaining players
+      - An updated  array of remaining players is returned and used to determine
+        the next action by the contract (i.e. make payouts to winners or prepare
+        for next week's picks)
+      - The call for the next week's results is scheduled within this function
 
   - In the contract, we store a list of players, their current pick, and their
     historical picks
       - This is how we verify a pick is ok when submitted
-      - However, we do not verify that a player is still alive (i.e. not
-        eliminated) on the smart contract. If they make a pick and are
-        eliminated, it will get ignored by the server
-  - We also store the total number of players remaining
-  - If the total remaining players is 1, we reach out to our API and figure out
-    who that player is
-  - This architecture is not yet implemented
+      - An array of remaining players is stored, but is provided by the API each
+        week
 */
 
 /**
