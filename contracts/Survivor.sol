@@ -80,6 +80,8 @@ contract Survivor is Pausable, PullPayment, usingOraclize {
   uint256 public ENTRY_FEE;
   // timestamp of entry deadline
   uint256 public ENTRY_DEADLINE;
+  // max number of players
+  uint256 public MAX_NUMBER_OF_PLAYERS = 100000;
 
 
   // NFL details ---------------------------------------------------------------
@@ -329,7 +331,7 @@ contract Survivor is Pausable, PullPayment, usingOraclize {
     // becomes a big target. This check is done with numPlayersRemaining since
     // it is equal to the number of players that join up until the entry deadline
     require(
-      numPlayersRemaining <= 100000,
+      numPlayersRemaining <= MAX_NUMBER_OF_PLAYERS,
       "This contract has reached its limit of 100,000 entrants, so no more players can join"
     );
 
