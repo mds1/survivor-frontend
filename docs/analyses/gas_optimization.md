@@ -2,7 +2,7 @@
 Initial deployment cost is 6,928,099 gas. This is under the block limit and deployable, but still fairly high. Let's try a few quick things to get this closer to 6 million so we have some more margin
 
 ## Final Cost
-Cut down gas about 12% to 6.09 million. Details are below.
+Cut down gas about 15% to 5.85 million million. Details are below.
 
 ## Details
 1. Removed `FIRST_PICK_DEADLINE` and `FIRST_WEEK_GAME_END` since they didnt really do anything
@@ -20,4 +20,8 @@ Cut down gas about 12% to 6.09 million. Details are below.
 4. `NUMBER_OF_TEAMS` is only used once when defining the `PlayerInfo` struct, and that will never change, so we can hardcode it
    * No change. I assume this was handled by the optimizer before
 
-After this brief optimization, constructor inputs were moved to become constants, and ontract payout logic was slightly modified to improve security and fix bugs. The resulting deployment cost was 6,092,001
+5. Incorporated the `changePick()` functionality into `makePick()`, which reduces gas costs and simplifies front end logic
+    * New deployment cost: 5,854,399
+    * Gas savings: 237,602
+
+After this brief optimization, constructor inputs were moved to become constants, and contract payout logic was slightly modified to improve security and fix bugs. Therefore the deployment cost may differ slightly from the final number given above.

@@ -1633,7 +1633,6 @@ contract Survivor is Pausable, PullPayment, usingOraclize {
 
   event LogNewPlayerJoined(address indexed player);
   event LogPickMade(address indexed player, uint256 indexed team);
-  event LogPickChanged(address indexed player, uint256 indexed oldteam, uint256 indexed newteam);
   event LogOraclizeQuery(string description);
   event LogRemainingPlayersReceived(address[] indexed players);
   event LogWinnersDetermined(address[] indexed winners);
@@ -1834,51 +1833,27 @@ contract Survivor is Pausable, PullPayment, usingOraclize {
     // gas costs get expensive
 
     // EFFECTS
+    if (players[msg.sender].currentPick > 0) {
+      // Pick has already been made, so change pick
+      // Get old team (current pick)
+      uint oldteam = players[msg.sender].currentPick;
+      // Update their history of picks to remove this one
+      players[msg.sender].picks[oldteam-1] = false;
+    }
+
     // Update the players current pick
     players[msg.sender].currentPick = _team;
     // Update their history of picks
     players[msg.sender].picks[_team-1] = true;
-    // Add to remaining players array
-    remainingPlayers.push(msg.sender);
+    // Add to remaining players array if this is week one and first pick
+    if (players[msg.sender].currentPick == 0 && currentWeek == 1) {
+      remainingPlayers.push(msg.sender);
+    }
+
     // Log that pick was made
     emit LogPickMade(msg.sender, _team);
 
   } // end makePick
-
-
-  /**
-   * @dev Allows players to change their pick for the week
-   * @param _team Integer 1-32 representing chosen team, mapped as shown above
-   * @notice Not yet implemented on the front end interface
-   */
-  function changePick(uint256 _team)
-    external
-    onlyBeforePickDeadline
-    onlyAllowValidTeams(_team)
-    onlyAllowNewTeams(_team)
-    whenNotPaused
-    whenGameIsNotOver
-  {
-
-    // CHECKS
-    // All checks handled with modifiers
-
-    // EFFECTS
-    // Get old team (current pick)
-    uint oldteam = players[msg.sender].currentPick;
-    // Update their history of picks to remove this one
-    players[msg.sender].picks[oldteam-1] = false;
-    // Update their history of picks to note the new pick
-    players[msg.sender].picks[_team-1] = true;
-    // Update the players current pick
-    players[msg.sender].currentPick = _team;
-    // Log that pick was changed
-    emit LogPickChanged(msg.sender, oldteam, _team);
-
-    // TODO: finish implementing/write tests -- what is left to do here?
-
-  } // end changePick
-
 
 
   /**
