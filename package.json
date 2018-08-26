@@ -7,6 +7,8 @@
   "author": "mds <17163988+mds1@users.noreply.github.com>",
   "private": true,
   "scripts": {
+    "build": "quasar build",
+    "start": "quasar serve",
     "lint": "eslint --ext .js,.vue src",
     "test": "echo \"No test specified\" && exit 0"
   },
