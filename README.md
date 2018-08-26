@@ -1,7 +1,7 @@
 NFL Survivor Decentralized Application. The backend code can be found [here](https://github.com/mds1/survivor-backend).
 
 # NFL Survivor Dapp
-This is a standard NFL Survivor pool implemented with Ethereum. A hosted version of this site can be found here.
+This is a standard NFL Survivor pool implemented with Ethereum. A hosted version of this site can be found here: https://survivor-frontend.netlify.com/
 
 Not familiar with Survivor leagues? Here's how to play:
 
@@ -94,3 +94,29 @@ Below are various ideas on how this contract can be improved upon:
 ## Acknowledgements
 * Big thanks to the [MySportsFeed](https://www.mysportsfeeds.com/) team for providing a free/inexpensive API to obtain sports data
 * Thanks to [OpenZeppelin](https://openzeppelin.org/) for their awesome library of smart contract
+
+## Developer Notes
+I was unable to deploy to Heroku. At first it seemed it was unable to resolve the webpack aliases, but removing them did not fix the issue. The current error message at deployment is below. The Quasar documentation on deployment was followed exactly. Currently hosting on Netlify until this is resolved
+
+```
+ERROR in ./src/ethereum/survivorInstance.js
+Module not found: Error: Can't resolve '../../build/contracts/Survivor.json' in '/tmp/build_956c2bfef9cb70bc93464a7a163bca78/src/ethereum'
+@ ./src/ethereum/survivorInstance.js 2:0-59 3:37-45
+@ ./src/store/actions.js
+@ ./src/store/index.js
+@ ./.quasar/app.js
+@ ./.quasar/client-entry.js
+@ multi ./.quasar/client-entry.js
+
+ERROR in ./src/ethereum/web3.js
+Module not found: Error: Can't resolve '../../config' in '/tmp/build_956c2bfef9cb70bc93464a7a163bca78/src/ethereum'
+@ ./src/ethereum/web3.js 6:17-40
+@ ./src/store/actions.js
+@ ./src/store/index.js
+@ ./.quasar/app.js
+@ ./.quasar/client-entry.js
+@ multi ./.quasar/client-entry.js
+
+
+app:build [FAIL] Build failed with errors. Check log above. +0ms
+```
