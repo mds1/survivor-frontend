@@ -10,6 +10,8 @@ export default {
   network: {
     required: '', // network required by the dapp (set in functions.js)
     current: '', // network user is connected to
+    currentAddress: '', // address of current MetaMask account
+    picks: '', // history of player picks
   },
 
   // Contract properties (require asynchronous calls)

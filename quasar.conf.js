@@ -63,6 +63,7 @@ module.exports = function (ctx) {
         'QDialog',
         'QTable',
         'QSelect',
+        'QToggle',
       ],
       directives: [
         'Ripple',

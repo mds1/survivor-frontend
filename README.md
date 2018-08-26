@@ -1,4 +1,4 @@
-(Work in progress). Designed for the ConsenSys Academy 2018 Developer Program Final Project. The backend code can be found [here](https://github.com/mds1/survivor-backend)
+NFL Survivor Decentralized Application. The backend code can be found [here](https://github.com/mds1/survivor-backend).
 
 # NFL Survivor Dapp
 Not familiar with Survivor leagues? Here's how to play:

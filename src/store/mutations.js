@@ -28,6 +28,11 @@ export default {
     state.network.current = network;
   },
 
+  SET_CURRENT_ADDRESS(state, obj) {
+    state.network.currentAddress = obj.account;
+    state.network.picks = obj.picks;
+  },
+
   // ======================================================================
   //                      Getting Contract Properties
   // ======================================================================

@@ -58,6 +58,25 @@ export default {
     context.commit('SET_CURRENT_NETWORK', currentNetwork);
   },
 
+  async set_currentAddress(context) { // this updates address and pick history
+    // Get address of current MetaMask account
+    const accounts = await web3.eth.getAccounts();
+    const account = accounts[0];
+    // Get their pick history
+    const history = await survivor.methods.getPlayersPickHistory(account).call();
+    const picks = [];
+    for (let i = 0; i < history.length; i++) {
+      if (history[i]) { picks.push(functions.integer2team(i + 1)); }
+    }
+
+    // Store both in objcet
+    const obj = {
+      account,
+      picks,
+    };
+    context.commit('SET_CURRENT_ADDRESS', obj);
+  },
+
   // ======================================================================
   //                      Getting Contract Properties
   // ======================================================================
@@ -118,4 +137,5 @@ export default {
     // commit state mutation
     context.commit('SET_USER_HAS_JOINED', userHasJoined);
   },
+
 };

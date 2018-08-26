@@ -8,12 +8,24 @@
         <q-select
         v-model="pick"
         :options="teams"
-        float-label="Select team for this week (selection cannot be changed after submitting)"
-        placeholder="Select team for this week (selection cannot be changed after submitting)"
+        float-label="Select team for this week"
+        placeholder="Select team for this week"
         :dark=true
         />
 
         <br>
+        <p class='small-font'>You are entering from address {{this.$store.state.network.currentAddress}}</p>
+        <q-toggle v-model="showPickHistory" label="Toggle your pick history" :left-label=true :dark=true class='history' />
+        <div class='history' v-if=showPickHistory >
+          <ul id="example-1">
+            <li v-for="team in this.$store.state.network.picks" :key="team.id" style="font-style:italic">
+              {{ team }}
+            </li>
+          </ul>
+        </div>
+        <br>
+        <br>
+
         <!-- button to send transaction -->
         <q-btn :loading='txsent' color="primary" text-color="text2" :disabled='txsent' v-on:click="formSubmitted">
           Submit pick
@@ -40,7 +52,8 @@ export default {
       txhash: '',
       requiredNetwork: this.$store.state.network.required,
       pick: '',
-      teams: []
+      teams: [],
+      showPickHistory: false
     }
   },
 
@@ -107,6 +120,14 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import '~variables';
+
+.history {
+  color: $text2;
+  font-size: 0.9 rem;
+  margin-bottom: 0.1 rem;
+}
+
 .form, .inputs {
   margin: auto;
 }
@@ -117,5 +138,10 @@ export default {
 
 .inputs {
   max-width: 320px;
+}
+
+.small-font {
+  font-size: 0.9 rem;
+  margin-bottom: 0.1 rem;
 }
 </style>

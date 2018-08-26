@@ -4,6 +4,7 @@
     <div class="form">
 
       <h5>Join now for 0.10 ETH!</h5>
+      <p class='small-font'>You are entering from address {{this.$store.state.network.currentAddress}}</p>
 
       <form @submit.prevent='formSubmitted'>
 
@@ -14,6 +15,7 @@
           <q-spinner slot="loading" />
           <span slot="loading">&nbsp;&nbsp;Transaction pending...</span>
         </q-btn>
+
 
       </form>
     </div>  <!-- end form div  -->
@@ -97,5 +99,13 @@ export default {
 
 .inputs {
   max-width: 320px;
+}
+
+.small-font {
+  font-size: 0.9 rem;
+}
+
+h5 {
+  margin-bottom: 0.5 rem;
 }
 </style>

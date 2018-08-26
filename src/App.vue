@@ -62,6 +62,7 @@ export default {
     this.$store.dispatch('set_isMetaMaskInstalled'); // ensure MetaMask is installed
     this.$store.dispatch('set_isMetaMaskUnlocked'); // ensure MetaMask is unlocked (async)
     this.$store.dispatch('set_isMetaMaskOnCorrectNetwork'); // ensure MetaMask is connected to the correct network (async)
+    this.$store.dispatch('set_currentAddress'); // get address of current user
   },
 };
 </script>

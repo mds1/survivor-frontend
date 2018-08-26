@@ -14,8 +14,8 @@
         <p class="footer-large">Check out the source code on GitHub</p>
         <a
           class="footer-small"
-          href="https://github.com/mds1/survivor">
-          https://github.com/mds1/survivor</a>
+          href="https://github.com/mds1/survivor-frontend">
+          https://github.com/mds1/survivor-frontend</a>
       </div>
 
       <!-- Third column  -->

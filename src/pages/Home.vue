@@ -9,8 +9,10 @@
     <!-- <p>This contract is managed by {{ this.$store.state.contract.owner }}</p> -->
     <!-- <p>There are currently XX players entered competing for a prize of YY ETH!</p> -->
     <p>{{ this.$store.state.contract.players.length }} players entered</p>
-    <p> {{ this.$store.state.contract.balance }} ETH up for grabs!</p>
+    <p class='join'> {{ this.$store.state.contract.balance }} ETH up for grabs!</p>
 
+    <hr>
+    <br>
     <div v-if=!this.$store.state.contract.userHasJoined>
       <app-join-pool/>
     </div>
@@ -60,5 +62,11 @@ export default {
 
 .main {
   margin-top: auto;
+}
+
+.join {
+  font-size: 1.2 rem;
+  font-weight: bold;
+  color: $primary;
 }
 </style>
