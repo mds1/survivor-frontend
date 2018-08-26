@@ -13,7 +13,7 @@ import survivor from '../../build/contracts/Survivor.json';
 
 const instance = new web3.eth.Contract(
   survivor.abi,
-  '0xf957151369a444c6bce79b29e0ff8c9f9950a24a',
+  '0x976595a9694fba7edc3e4af5dcaf26292e1bac45',
 );
 
 export default instance;

@@ -117,6 +117,26 @@ contract('Survivor', (accounts) => {
     assert.equal(await survivor.owner(), accounts[0], 'Variable "owner" was not properly set');
   });
 
+  // check that it can be paused by the owner -- this is important to ensure
+  // circuit breaker functionality works
+  it('can be paused', async () => {
+    // call the pause function
+    await survivor.pause();
+    // check the paused state variable
+    const isPaused = await survivor.paused();
+    expect(isPaused).to.equal(true);
+  });
+
+  // check that it can be unpaused after it has been paused -- this ensures
+  // we can resume normal operation after pausing
+  it('can be unpaused', async () => {
+    // call the unpause function
+    await survivor.unpause();
+    // check the paused state variable
+    const isPaused = await survivor.paused();
+    expect(isPaused).to.equal(false);
+  });
+
   // TESTS FOR JOINING THE POOL ------------------------------------------------
   // check that it allows players to join the pool -- this is nedded to ensure
   // players can actually participate in the pool
@@ -171,8 +191,12 @@ contract('Survivor', (accounts) => {
   // check that players can make picks before the deadline -- this is needed to
   // ensure players can make picks each week
   it('allows players to make picks before the pick deadline', async () => {
+    // ensure pick is succesfully made
     const result = await makePick(32, accounts[0]);
     expect(result.receipt.status).to.equal('0x1');
+    // ensure player is added to list of remaining players
+    const players = await survivor.getRemainingPlayers();
+    expect(players[0]).to.be.equal(accounts[0]);
   });
 
   // check that players cannot make picks if they have not joined -- this
@@ -231,13 +255,17 @@ contract('Survivor', (accounts) => {
 
   // check that players can change their picks before the deadline
   it('allows players to change their picks before the pick deadline', async () => {
-    // Functionality not yet implemented
+    // This is handled by the makePick()) function and was tested manually
+    // on the front end -- this was done to ensure front end references were
+    // properly updated as well
   });
 
   // check that players cannot change their picks after the deadline
   it('prevents players from changing their picks after the pick deadline', async () => {
     // changePicks uses the same modifiers as makePicks to prevent this, so
-    // we do not need to implement this test twice
+    // we do not need to implement this test twice -- however, note that we
+    // currently cannot implement this due to the aforementioned issues with
+    // ganache-cli's evm_increaseTime method
   });
 
   // TESTS FOR RECEIVING RESULTS -----------------------------------------------

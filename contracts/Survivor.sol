@@ -1841,14 +1841,14 @@ contract Survivor is Pausable, PullPayment, usingOraclize {
       players[msg.sender].picks[oldteam-1] = false;
     }
 
-    // Update the players current pick
-    players[msg.sender].currentPick = _team;
-    // Update their history of picks
-    players[msg.sender].picks[_team-1] = true;
     // Add to remaining players array if this is week one and first pick
     if (players[msg.sender].currentPick == 0 && currentWeek == 1) {
       remainingPlayers.push(msg.sender);
     }
+    // Update the players current pick
+    players[msg.sender].currentPick = _team;
+    // Update their history of picks
+    players[msg.sender].picks[_team-1] = true;
 
     // Log that pick was made
     emit LogPickMade(msg.sender, _team);
