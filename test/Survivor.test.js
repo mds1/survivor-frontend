@@ -43,13 +43,12 @@ contract('Survivor', (accounts) => {
   // Here we define functions that would be used to make the required contract
   // calls. This just makes the tests easier to read and reduces duplicate code
 
-  // FUNCTION joinPool
-  //   Called by a user to join the Survivor pool
-  // INPUTS
-  //   value   -- amount of Wei the user would send along to pay the entry fee
-  //   account -- ganache account to send the transaction from
-  // OUTPUTS
-  //   result  -- result of transaction
+  /**
+   * Called by a user to join the Survivor pool
+   * @param value amount of Wei the user would send along to pay the entry fee
+   * @param account ganache account to send the transaction from
+   * @returns result of transcation
+   */
   async function joinPool(value, account) {
     const result = await survivor.joinPool({
       from: account,
@@ -59,13 +58,12 @@ contract('Survivor', (accounts) => {
   } // end joinPool
 
 
-  // FUNCTION makePick
-  //   Called by a user to make a pick
-  // INPUTS
-  //   integer -- 0-31 alphabetically corresponding to team names
-  //   account -- ganache account to send the transaction from
-  // OUTPUTS
-  //   result  -- result of transaction
+  /**
+   * Called by a user to make a pick
+   * @param integer 1-32 alphabetically corresponding to team names
+   * @param account ganache-cli account to send the transaction from
+   * @returns result of transaction
+   */
   async function makePick(integer, account) {
     const result = await survivor.makePick(integer, {
       from: account,
@@ -74,10 +72,10 @@ contract('Survivor', (accounts) => {
   } // end makePick
 
 
-  // FUNCTION increaseTime
-  //   Increase EVM time in ganache to simulate calls in the future
-  // INPUTS
-  //   integer -- number of seconds to increase time by
+  /**
+   * Increase EVM time in ganache to simulate calls in the future
+   * @param integer Number of seconds to increase time by
+   */
   async function increaseTime(integer) {
     // First we increase the time
     await web3.currentProvider.send({
@@ -87,7 +85,8 @@ contract('Survivor', (accounts) => {
       id: 0,
     }, () => {});
 
-    // Then we mine a block to actually get the time change to occur
+    // Then we mine a block to actually get the time change to occur (see this
+    // issue: https://github.com/trufflesuite/ganache-cli/issues/394)
     await web3.currentProvider.send({
       jsonrpc: '2.0',
       method: 'evm_mine',
@@ -111,21 +110,24 @@ contract('Survivor', (accounts) => {
   });
 
   // ADMINISTRATIVE TESTS ------------------------------------------------------
-  // check that it assigns the deployer as the owner
+  // check that it assigns the deployer as the owner -- this is needed to ensure
+  // the contract can be paused if needed
   it('properly assigns the owner', async () => {
     // console.log(survivor)
     assert.equal(await survivor.owner(), accounts[0], 'Variable "owner" was not properly set');
   });
 
   // TESTS FOR JOINING THE POOL ------------------------------------------------
-  // check that it allows players to join the pool
+  // check that it allows players to join the pool -- this is nedded to ensure
+  // players can actually participate in the pool
   it('allows players to join the pool', async () => {
     // join pool
     const result = await joinPool(ENTRY_FEE, accounts[0]);
     expect(result.receipt.status).to.equal('0x1');
   });
 
-  // check that it won't allow entries when msg.value < ENTRY_FEE
+  // check that it won't allow entries when msg.value < ENTRY_FEE -- we must
+  // ensure you cannot join if you pay less than the required entry fee
   it('prevents joining if msg.value < ENTRY_FEE', async () => {
     // this test is looking for a failed entry
     const joinPoolFailure = async function () {
@@ -134,7 +136,8 @@ contract('Survivor', (accounts) => {
     return expect(joinPoolFailure()).to.be.rejectedWith(Error);
   });
 
-  // check that it won't allow entries when msg.value > ENTRY_FEE
+  // check that it won't allow entries when msg.value > ENTRY_FEE -- similar to
+  // above, players should not pay more than the entry fee either
   it('prevents joining if msg.value < ENTRY_FEE', async () => {
     // this test is looking for a failed entry
     const joinPoolFailure = async function () {
@@ -143,7 +146,8 @@ contract('Survivor', (accounts) => {
     return expect(joinPoolFailure()).to.be.rejectedWith(Error);
   });
 
-  // check that player status is correctly updated after joining
+  // check that player status is correctly updated after joining -- this
+  // ensures the contract state is properly updated after each pick
   it('properly updates state variables after a player joins', async () => {
     // Enter 2 more people (accounts[0] already joined in previous test)
     await joinPool(ENTRY_FEE, accounts[1]);
@@ -152,36 +156,38 @@ contract('Survivor', (accounts) => {
 
     // Confirm results (convert from BigNumber to String)
     const numPlayersEntered = String(await survivor.getNumberOfPlayers());
-    const numPlayersRemaining = String(await survivor.numPlayersRemaining());
 
-    // using this approach to get contract balance because for some reason
+    // using contract function to get contract balance because for some reason
     // web3.eth.getBalance always returns 0
     const balance = String(await survivor.getContractBalance());
     const players = await survivor.getEnteredPlayers();
 
     expect(numPlayersEntered).to.be.equal(nplayers);
-    expect(numPlayersRemaining).to.be.equal(nplayers);
     expect(balance).to.be.equal(String(nplayers * ENTRY_FEE));
     expect(String(players.length)).to.be.equal(nplayers);
   });
 
   // TESTS FOR MAKING PICKS ----------------------------------------------------
-  // check that players can make picks before the deadline
+  // check that players can make picks before the deadline -- this is needed to
+  // ensure players can make picks each week
   it('allows players to make picks before the pick deadline', async () => {
-    const result = await makePick(1, accounts[0]);
+    const result = await makePick(32, accounts[0]);
     expect(result.receipt.status).to.equal('0x1');
   });
 
-  // check that players cannot make picks if they have not joined
+  // check that players cannot make picks if they have not joined -- this
+  // prevents peolpe from participating if they have not paid the entry fee
   it('prevents players from making picks if they have not joined', async () => {
     // this test is looking for a failed entry
     const makePickFailure = async function () {
-      await makePick(0, accounts[5]); // use account that has not entered
+      await makePick(3, accounts[5]); // use account that has not entered
     };
     return expect(makePickFailure()).to.be.rejectedWith(Error);
   });
 
-  // check that players cannot make picks using invalid integers/teams
+  // check that players cannot make picks using invalid integers/teams -- for
+  // security reasons, it is very important to ensure only allowable user
+  // inputs are accepted
   it('prevents players from making picks with invalid teams', async () => {
     // this test is looking for a failed entry
     const makePickFailure = async function () {
@@ -191,19 +197,29 @@ contract('Survivor', (accounts) => {
     return expect(makePickFailure()).to.be.rejectedWith(Error);
   });
 
-  // check that players cannot make picks after the deadline
+  // check that players cannot make picks after the deadline -- this prevents
+  // cheating by ensuring that players cannot choose teams after games have started
   it('prevents players from making picks after the pick deadline', async () => {
-    // this test is looking for a failed entry
+    // // this test is commented out, since it fails due to an issue with
+    // // ganache-cli's evm_increaseTime method
+    // // see issue here: https://github.com/trufflesuite/ganache-cli/issues/336
+    // // details on my implementation at the end here: https://medium.com/@msolomon44/lessons-learned-from-developing-an-nfl-survivor-pool-on-ethereum-992dd4efbb25
+
+    // // this test is looking for a failed entry
     // let block = await web3.eth.getBlock('latest');
+    // // Log initial timestamp -- 1535296387
     // console.log(block.timestamp);
 
+    // // Increase time by a huge amount simply to make it easier to distinguish
+    // // between the logged 10-digit numbers (this changes leading digit from a
+    // // 1 to a 2)
     // await increaseTime(533868440);
 
+    // // Get new block number
     // block = await web3.eth.getBlock('latest');
+    // // Log new timestamp from ganache-cli -- 2069164830 (seems to be updated)
     // console.log(block.timestamp);
-
-    // console.log(String(await survivor.currentPickDeadline()));
-
+    // // Log timestamp returned by the contract -- 1535298108 (not updated)
     // console.log(String(await survivor.getTime()));
 
     // const makePickFailure = async function () {
@@ -220,27 +236,28 @@ contract('Survivor', (accounts) => {
 
   // check that players cannot change their picks after the deadline
   it('prevents players from changing their picks after the pick deadline', async () => {
-    // Functionality not yet implemented, since changePicks is not implemented
+    // changePicks uses the same modifiers as makePicks to prevent this, so
+    // we do not need to implement this test twice
   });
 
   // TESTS FOR RECEIVING RESULTS -----------------------------------------------
-  // check that game results are properly received from server
-  it('receives results from the server', async () => {
-
+  // check that game results are properly received from Oraclize
+  it('receives results from Oraclize', async () => {
+    // not implemented, as ganache-cli's evm_increaseTime method does not
+    // seem to work properly
+    // see issue here: https://github.com/trufflesuite/ganache-cli/issues/336
   });
 
   // TESTS FOR SAFEGUARDS ------------------------------------------------------
-  // check that the contract refunds people if results are not provided
-  it('sets up refunds for withdrawal if results are not provided', async () => {
-
+  // check that the contract refunds people if results are not provided -- we
+  // provide a way of providing refunds if Oraclize goes down
+  it('provides refunds for withdrawal if results are not provided', async () => {
+    // currently not implemented due to time constraints
   });
 
-  // check that it allows players to withdraw refunds
-  it('allows players to withdraw their refunds', async () => {
 
-  });
-
-  // check that ownership can be changed
+  // check that ownership can be changed -- this is important in case the
+  // original owner can no longer manage the contract to pause if needed
   it('allows ownership to be changed', async () => {
     // get current owner
     const owner = await survivor.owner();
