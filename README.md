@@ -1,4 +1,4 @@
-NFL Survivor Decentralized Application. The backend code can be found [here](https://github.com/mds1/survivor-backend).
+NFL Survivor Decentralized Application, front end. The backend code can be found [here](https://github.com/mds1/survivor-backend).
 
 # NFL Survivor Dapp
 This is a standard NFL Survivor pool implemented with Ethereum. A hosted version of this site can be found here: https://survivor-frontend.netlify.com/
