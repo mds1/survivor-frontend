@@ -2,7 +2,7 @@
 // place this file in the src/components/common folder
 
 import { Notify } from 'quasar';
-import web3 from '@ethereum/web3';
+import web3 from '../../ethereum/web3';
 
 // =======================================================================================
 //                                       Generic

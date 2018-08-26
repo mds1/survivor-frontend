@@ -44,9 +44,9 @@ TO DO:
 /*
  * Root component
  */
-import MetaMaskCheck from '@common/MetaMaskCheck.vue';
-import Header from '@common/Header.vue';
-import Footer from '@common/Footer.vue';
+import MetaMaskCheck from './components/common/MetaMaskCheck.vue';
+import Header from './components/common/Header.vue';
+import Footer from './components/common/Footer.vue';
 
 export default {
   components: {

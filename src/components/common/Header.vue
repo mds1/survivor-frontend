@@ -7,7 +7,7 @@
 
         <!-- Left-aligned site name / link to home page -->
         <a href="https://www.ethereum.org/" target="_blank">
-          <img src="@src/statics/ethereum-logo.png" alt="Ethereum logo" height=70px>
+          <img src="../../statics/ethereum-logo.png" alt="Ethereum logo" height=70px>
         </a>
 
         <!-- Right-aligned links to other pages -->

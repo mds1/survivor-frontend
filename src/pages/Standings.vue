@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { integer2team } from '@common/functions';
+import { integer2team } from '../components/common/functions';
 
 export default {
   data() {

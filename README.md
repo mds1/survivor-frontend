@@ -1,6 +1,8 @@
 NFL Survivor Decentralized Application. The backend code can be found [here](https://github.com/mds1/survivor-backend).
 
 # NFL Survivor Dapp
+This is a standard NFL Survivor pool implemented with Ethereum. A hosted version of this site can be found here.
+
 Not familiar with Survivor leagues? Here's how to play:
 
 * Pay the entry fee to join the Survivor pool

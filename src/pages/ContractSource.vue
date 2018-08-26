@@ -20,8 +20,8 @@
 </template>
 
 <script>
-import survivor from '@ethereum/survivorInstance.js';
-import { createEtherscanAddressLink, getSourceCodeFromEtherscan } from '@components/common/functions';
+import survivor from '../ethereum/survivorInstance.js';
+import { createEtherscanAddressLink, getSourceCodeFromEtherscan } from '../components/common/functions';
 
 export default {
   data() {

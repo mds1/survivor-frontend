@@ -1,8 +1,8 @@
-import Home from '@pages/Home.vue';
-import Standings from '@pages/Standings.vue';
-import ContractSource from '@pages/ContractSource.vue';
-import FAQ from '@pages/FAQ.vue';
-import Error404 from '@pages/Error404.vue';
+import Home from '../pages/Home.vue';
+import Standings from '../pages/Standings.vue';
+import ContractSource from '../pages/ContractSource.vue';
+import FAQ from '../pages/FAQ.vue';
+import Error404 from '../pages/Error404.vue';
 
 const routes = [
   { path: '/', component: Home },

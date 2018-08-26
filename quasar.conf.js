@@ -36,14 +36,14 @@ module.exports = function (ctx) {
         });
         cfg.resolve.alias = {
           ...cfg.resolve.alias,
-          '@components': path.resolve(__dirname, './src/components'),
-          '@common': path.resolve(__dirname, './src/components/common'),
-          '@contract': path.resolve(__dirname, './src/components/contract'),
-          '@contracts': path.resolve(__dirname, './build/contracts'),
-          '@pages': path.resolve(__dirname, './src/pages'),
-          '@ethereum': path.resolve(__dirname, './src/ethereum'),
-          '@src': path.resolve(__dirname, './src'),
-          '@root': path.resolve(__dirname, './'),
+          // '@components': path.resolve(__dirname, './src/components'),
+          // '@common': path.resolve(__dirname, './src/components/common'),
+          // '@contract': path.resolve(__dirname, './src/components/contract'),
+          // '@contracts': path.resolve(__dirname, './build/contracts'),
+          // '@pages': path.resolve(__dirname, './src/pages'),
+          // '@ethereum': path.resolve(__dirname, './src/ethereum'),
+          // '@src': path.resolve(__dirname, './src'),
+          // '@root': path.resolve(__dirname, './'),
         };
       },
     },

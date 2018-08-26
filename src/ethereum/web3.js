@@ -19,9 +19,18 @@ import Web3 from 'web3';
 let web3;
 
 // Import Infura key
-const constants = require('@root/config');
-
-const { infuraAPIKey } = constants;
+// Import keys
+let infuraAPIKey;
+if (typeof process.env.infuraAPIKey === 'undefined') {
+  // Running locally, so read from config file (TODO: set env vars locally)
+  /* eslint-disable-next-line global-require */
+  /* eslint-disable-next-line */
+  infuraAPIKey = require('../../config').infuraAPIKey;
+} else {
+  // Running on server, read from environment variable
+  /* eslint-disable-next-line prefer-destructuring */
+  infuraAPIKey = process.env.infuraAPIKey;
+}
 
 // *REPLACE* -- make sure network matches the string in requiredNetwork() in functions.js
 // TODO: replace this with an import of the requiredNetwork function

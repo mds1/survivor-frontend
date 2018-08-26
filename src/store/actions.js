@@ -1,6 +1,6 @@
-import web3 from '@ethereum/web3';
-import survivor from '@ethereum/survivorInstance.js';
-import * as functions from '@common/functions.js';
+import web3 from '../ethereum/web3';
+import survivor from '../ethereum/survivorInstance.js';
+import * as functions from '../components/common/functions.js';
 
 export default {
 

@@ -2,7 +2,7 @@
 import web3 from './web3';
 
 // the file below will be output after compiling
-import survivor from '@contracts/Survivor.json';
+import survivor from '../../build/contracts/Survivor.json';
 
 // Create and export instance of the contract
 // This allows us to simply import this file to interact with the deployed contract, e.g:

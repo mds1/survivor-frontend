@@ -41,9 +41,9 @@
 
 <script>
 /* eslint-disable */
-import survivor from '@ethereum/survivorInstance.js'
-import web3 from '@ethereum/web3'
-import * as functions from '@common/functions.js'
+import survivor from '../../ethereum/survivorInstance.js'
+import web3 from '../../ethereum/web3'
+import * as functions from '../common/functions.js'
 
 export default {
   data() {

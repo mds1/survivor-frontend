@@ -28,10 +28,10 @@
 </template>
 
 <script>
-import survivor from '@ethereum/survivorInstance.js';
-import JoinPool from '@contract/JoinPool.vue';
-import MakePick from '@contract/MakePick.vue';
-import Deadline from '@contract/Deadline.vue';
+import survivor from '../ethereum/survivorInstance.js';
+import JoinPool from '../components/contract/JoinPool.vue';
+import MakePick from '../components/contract/MakePick.vue';
+import Deadline from '../components/contract/Deadline.vue';
 
 export default {
   data() {
