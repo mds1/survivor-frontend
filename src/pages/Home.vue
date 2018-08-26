@@ -22,7 +22,7 @@
 
     <br>
 
-    <app-deadline/>
+    <app-deadline deadline="Thu Sep 06 2018 24:00:00 GMT-0000"></app-deadline>
 
   </div>
 </template>
