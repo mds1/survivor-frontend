@@ -1,7 +1,7 @@
 NFL Survivor Decentralized Application, front end. The backend code can be found [here](https://github.com/mds1/survivor-backend).
 
 # NFL Survivor Dapp
-This is a standard NFL Survivor pool implemented with Ethereum. [MetaMask](https://metamask.io/) is required to interact with this site. A hosted version of this site can be found [here](https://survivor-frontend.netlify.com/)
+This is a standard NFL Survivor pool implemented with Ethereum and hosted [here](https://survivor-frontend.netlify.com/). The best way to interact with this site is through [MetaMask](https://metamask.io/), although apps like [Status](https://status.im/) and [Coinbase Wallet](https://www.toshi.org/) will also work (although some features, such as the deadline date, do not appear properly).
 
 Not familiar with Survivor leagues? Here's how to play:
 
