@@ -3,6 +3,11 @@
 
 import { Notify } from 'quasar';
 import web3 from '../../ethereum/web3';
+// Use axios for Etherscan API requests
+const axios = require('axios');
+// Get Etherscan API Key from our config file
+const { etherscanAPIKey } = require('../../../config');
+
 
 // =======================================================================================
 //                                       Generic
@@ -85,22 +90,29 @@ export function createEtherscanAddressLink(network, address) {
   return `https://${network}.etherscan.io/address/${address}`;
 }
 
-export function getSourceCodeFromEtherscan(network, address) {
+export async function getSourceCodeFromEtherscan(network, address) {
   // network: string, ethereum network the address is on (e.g. main, ropsten, etc.)
   // address: address to generate link for
 
-  // generate and return URL
-  let url;
+  // define base of url base on the network
+  let base;
   if (network.toUpperCase() === 'MAIN') {
-    url = `https://etherscan.io/address/${address}#code`;
+    base = 'https://api.etherscan.io/api?module=contract&action=getsourcecode';
   } else {
-    url = `https://${network}.etherscan.io/address/${address}#code`;
+    base = `https://api-${network.toLowerCase()}.etherscan.io/api?module=contract&action=getsourcecode`;
   }
 
-  // copy source code
-  // TO DO
+  // generate url for query
+  const url = `${base}&address=${address}&apikey=${etherscanAPIKey}`;
 
-  return url;
+  // send query to get source code and return the code
+  const response = await axios.get(url);
+  if (response.status === 200) {
+    const code = response.data.result[0].SourceCode;
+    return code;
+  }
+  // call failed
+  return 'Error: could not retrieve contract source code from Etherscan';
 }
 
 export function capitalizeFirstLetter(string) {

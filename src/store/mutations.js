@@ -57,4 +57,8 @@ export default {
   SET_USER_HAS_JOINED(state, userHasJoined) {
     state.contract.userHasJoined = userHasJoined;
   },
+
+  SET_SOURCE_CODE(state, code) {
+    state.contract.code = code;
+  },
 };

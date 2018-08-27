@@ -138,4 +138,14 @@ export default {
     context.commit('SET_USER_HAS_JOINED', userHasJoined);
   },
 
+  async setSourceCode(context) {
+    // get current network and contract address
+    const network = await functions.currentNetwork();
+    /* eslint-disable-next-line prefer-destructuring */
+    const address = survivor.options.address;
+    // get contract code
+    const code = await functions.getSourceCodeFromEtherscan(network, address);
+    // commit state mutation
+    context.commit('SET_SOURCE_CODE', code);
+  },
 };

@@ -22,5 +22,6 @@ export default {
     balance: '', // contract balance
     entryFee: '', // required amount to join
     userHasJoined: false, // bool, has this visitor joined the pool
+    code: '', // contract source code
   },
 };

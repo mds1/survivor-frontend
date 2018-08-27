@@ -10,18 +10,19 @@
       In-line source code coming soon...
     </p>
 
+    <!-- <p>{{ this.$store.state.contract.code }}</p>
     <pre>
       <code>
-      <!-- {{ this.code }} -->
+
       </code>
-    </pre>
+    </pre> -->
 
   </div>
 </template>
 
 <script>
 import survivor from '../ethereum/survivorInstance.js';
-import { createEtherscanAddressLink, getSourceCodeFromEtherscan } from '../components/common/functions';
+import { createEtherscanAddressLink } from '../components/common/functions';
 
 export default {
   data() {
@@ -29,21 +30,18 @@ export default {
       // eslint-disable-next-line no-underscore-dangle
       address: survivor._address,
       addressURL: '',
-      code: '',
     };
   },
 
   created() {
+    // Get source code from Etherscan
+    this.$store.dispatch('setSourceCode');
     // Get network and contract address
     const network = this.$store.state.network.required;
     // eslint-disable-next-line prefer-destructuring
     const address = this.address;
-
     // Generate transaction link
     this.addressURL = createEtherscanAddressLink(network, address);
-
-    // Get source code (this function is in progress)
-    this.code = getSourceCodeFromEtherscan(network, address);
   },
 
 };
