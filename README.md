@@ -1,7 +1,7 @@
 NFL Survivor Decentralized Application, front end. The backend code can be found [here](https://github.com/mds1/survivor-backend).
 
 # NFL Survivor Dapp
-This is a standard NFL Survivor pool implemented with Ethereum. A hosted version of this site can be found here: https://survivor-frontend.netlify.com/
+This is a standard NFL Survivor pool implemented with Ethereum. [MetaMask](https://metamask.io/) is required to interact with this site. A hosted version of this site can be found [here(https://survivor-frontend.netlify.com/)
 
 Not familiar with Survivor leagues? Here's how to play:
 
@@ -14,8 +14,19 @@ Not familiar with Survivor leagues? Here's how to play:
   * If there is a tie at the end of the season, the remaining players split the pot
   * If all remaining players are eliminated at once, those players all split the pot
 
-## Config.js
-To build/deploy this project you will need to create a file in the project root called `config.js` that looks like this:
+
+## Getting Started
+You can use a live version of this site [here](https://survivor-frontend.netlify.com/). Alternatively, if you'd like to run a local development server or execute tests, follow the steps below.
+
+### Development Server Setup
+This is only necessary ff you'd like to run a local development server instead of using the live website. You'll need to install [Vue](https://vuejs.org/), [Quasar Framework](https://quasar-framework.org/), and [Truffle](https://truffleframework.com/) using the following commands:
+```
+npm install -g vue-cli
+npm install -g quasar-cli
+npm install -g truffle
+```
+
+Next, clone this project somehwere on your computer and run `npm install`. After cloning, create a file in the project root called `config.js` that looks like this:
 ```JavaScript
 const keys = {
   infuraAPIKey: 'your infura key',
@@ -24,25 +35,32 @@ const keys = {
 
 module.exports = keys;
 ```
+You can make an account at [Infura](https://infura.io/) to obtain an API key. Your mnemonic phrase can be found in the MetaMask settings. Be sure to keep this secret and do not commit it to GitHub. If the mnemonic phrase is compromised you may lose all your funds.
 
-## Getting Started
-To run a copy of this locally on a development server:
-1. Run `npm install`
-2. Run `quasar dev` (this will get you up and running using the copy of this contract on the Rinkeby network)
+Finally:
+1. Compile contracts with `truffle compile`
+2. Begin the development server using `quasar dev`. This will get you up and running using the version of this contract on the Rinkeby network.
 
-## Testing
-If you'd like to run the tests, there's a few extra setup steps
-1. Either `git clone` or download [ethereum-bridge](https://github.com/oraclize/ethereum-bridge) somewhere on your computer _outside_ of this folder
+### Running Tests
+
+To execute tests, you'll need to install [Ganache CLI](https://github.com/trufflesuite/ganache-cli) and [Truffle](https://truffleframework.com/). These can be installed with
+```
+npm install -g ganache-cli
+npm install -g truffle
+```
+
+After installing those:
+1. Download or `git clone` this project somewhere on your computer
 2. Run `npm install` within that folder
-3. Install [Gananche CLI](https://github.com/trufflesuite/ganache-cli) using `npm install -g ganache-cli`
-4. Install [Truffle](https://github.com/trufflesuite/truffle) using `npm install -g truffle@4.1.3` (newer versions of Truffle will not work, as Oraclize is only compatible with versions of Solidity <= 0.4.20, and Truffle versions are currently tied to specific Solidity versions)
+3. Download or `git clone` [ethereum-bridge](https://github.com/oraclize/ethereum-bridge) somewhere on your computer _outside_ of this project's root folder
+4. Run `npm install` within that folder
 
-Then, to run tests:
-1. From within this project's folder, start up ganache-cli using `ganache-cli -d -l 0x6ACFC0`
-   * The `-l 0x6ACFC0` increases the block gas limit to 7,000,000. This is used since the default ganache gas limit is lower than the Rinkey/Mainnet gas limits, and the contract is expensive to deploy so needs to bring this up a bit
+Now you have all the prerequisites ready to go. To run the tests:
+1. From within this project's folder, start up ganache-cli using `ganache-cli -l 0x6ACFC0`
+   * The `-l 0x6ACFC0` increases the block gas limit to 7,000,000. This is used because the default Ganache CLI block gas limit is lower than the Rinkey/Mainnet block gas limits. This contract is expensive to deploy, so this raises the gas limit a bit
 2. In a separate terminal window, navigate to the `ethereum-bridge` folder and start up ethereum-bridge using `node bridge -H localhost:8545 -a 9 --dev`
-   * If interested, you can read more about this command in the ethereum-bridge docs and in [this](https://medium.com/coinmonks/using-apis-in-your-ethereum-smart-contract-with-oraclize-95656434292e) article
-3. In a third terminal window, run tests with `truffle test`
+   * If interested, you can read more about this command in the ethereum-bridge documentation and in [this](https://medium.com/coinmonks/using-apis-in-your-ethereum-smart-contract-with-oraclize-95656434292e) article
+3. Once the previous command is finished, open a third terminal window and run tests with `truffle test`
 
 ## App Architecture
 This section explains the architecture used for the three parts of this application: the smart contract, the frontend user interface, and the server

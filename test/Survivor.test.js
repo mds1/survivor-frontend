@@ -158,7 +158,7 @@ contract('Survivor', (accounts) => {
 
   // check that it won't allow entries when msg.value > ENTRY_FEE -- similar to
   // above, players should not pay more than the entry fee either
-  it('prevents joining if msg.value < ENTRY_FEE', async () => {
+  it('prevents joining if msg.value > ENTRY_FEE', async () => {
     // this test is looking for a failed entry
     const joinPoolFailure = async function () {
       await joinPool(ENTRY_FEE * 2, accounts[1]);
