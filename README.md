@@ -75,7 +75,7 @@ The main smart contract, `Survivor.sol`, can be found in the `contracts` folder.
 
 * In the contract, we store a list of players, their current pick, and their historical picks
   * This is how we verify a pick is ok when submitted
-  * We do not need to check if a player is alive when they make a pick, since the API handles this using the remainingPlayers array stored by the contract
+  * We do not need to check if a player is alive when they make a pick, since the API handles this using the `remainingPlayers` array stored by the contract
 
 
 * After week 1 games end, Oraclize calls `__callback` and provides results
@@ -88,13 +88,14 @@ The main smart contract, `Survivor.sol`, can be found in the `contracts` folder.
 ### Frontend
 Interaction with the frontend should be self-explanatory for the most part. However, you will need to refresh the page after submitting a transaction to see the updated UI. A few things of note:
 * [MetaMask](https://metamask.io/), or some other client that injects web3, is required to use this dapp.
-* For convenience, the Smart Contracts page provides the contract source code and links to the corresponding Etherscan page
+* For convenience, the Smart Contracts page links to the corresponding Etherscan page for the Rinkeby version of the contract
 * [Quasar Framework](https://github.com/quasarframework/quasar) is used as the foundation, which uses [Vue](https://vuejs.org/), [Vuex](https://vuex.vuejs.org/), and [Vue Router](https://router.vuejs.org/)behind the scenes
 
 ### Server
 * In order to simplify smart contract logic and reduce gas costs, a simple server was setup to obtain weekly game results and determine which players remain
 * The server sends back an array of addresses to the contract to indicate which players survived that week
 * Calls to the server are made using [Oraclize](http://www.oraclize.it/) in order to ensure data integrity. Oraclize also simplifies the process of scheduling weekly calls to the server to get results
+* More about the server can be found in its [repository](https://github.com/mds1/survivor-backend)
 
 
 ## Future Improvements
@@ -112,6 +113,7 @@ Below are various ideas on how this contract can be improved upon:
 ## Acknowledgements
 * Big thanks to the [MySportsFeed](https://www.mysportsfeeds.com/) team for providing a free/inexpensive API to obtain sports data
 * Thanks to [OpenZeppelin](https://openzeppelin.org/) for their awesome library of smart contract
+* Thanks to [Quasar Framework](https://github.com/quasarframework/quasar) for providing an awesome development framework on top of Vue, with lots of great components
 
 ## Developer Notes
 I was unable to deploy to Heroku. At first it seemed it was unable to resolve the webpack aliases, but removing them did not fix the issue. The current error message at deployment is below. The Quasar documentation on deployment was followed exactly. Currently hosting on Netlify until this is resolved
