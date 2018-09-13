@@ -58,7 +58,7 @@ export function integer2team(integer) {
     14: 'Indianapolis Colts',
     15: 'Jacksonville Jaguars',
     16: 'Kansas City Chiefs',
-    17: 'Los Angeles Charger', // LA chargers
+    17: 'Los Angeles Chargers', // LA chargers
     18: 'Los Angeles Rams', // LA rams (not LAR, since MySportsFeed uses LA)
     19: 'Miami Dolphins',
     20: 'Minnesota Vikings',

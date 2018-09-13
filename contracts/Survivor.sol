@@ -1559,8 +1559,8 @@ contract Survivor is Pausable, PullPayment, usingOraclize {
   // Variables for entering the contract ---------------------------------------
   // fee required to enter
   uint256 constant public ENTRY_FEE = 0.1 ether;
-  // timestamp of entry deadline, set to 2018-09-06, 8:00 PM EST
-  uint256 constant public ENTRY_DEADLINE = 1536278400;
+  // timestamp of entry deadline, set to 2018-09-13, 8:00 PM EST (NFL week 2)
+  uint256 constant public ENTRY_DEADLINE = 1536883200;
   // max number of players
   uint256 constant private MAX_NUMBER_OF_PLAYERS = 100000;
 
